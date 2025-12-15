@@ -1,204 +1,311 @@
-# 📱 LMS CeLOE - Learning Management System Telkom University
+# 📱 Smart UIM - Learning Management System
+## Universitas Islam Madura (UIM)
 
-## 👨‍🎓 Informasi Mahasiswa
-- **Nama**: DANDY CANDRA PRATAMA
-- **NIM**: 7708170114
-- **Program Studi**: D4 Teknologi Rekayasa Multimedia
-- **Fakultas**: FIT
-- **Mata Kuliah**: MOBILE PROGRAMMING
-- **Kelas**: B 22
+[![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-blue)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.0%2B-blue)](https://dart.dev)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-## 📝 Deskripsi Proyek
+---
 
-Aplikasi **LMS CeLOE** adalah aplikasi Learning Management System berbasis Flutter yang dirancang khusus untuk mahasiswa Telkom University. Aplikasi ini menggunakan tema warna hijau yang konsisten dengan identitas visual Telkom University.
+## 👨‍🎓 INFORMASI MAHASISWA
 
-## ✨ Fitur Utama
+| Data | Keterangan |
+|------|------------|
+| **Nama** | Moh. Syaiful Anam |
+| **NIM** | 2022020100078 |
+| **Program Studi** | Teknik Informatika |
+| **Universitas** | Universitas Islam Madura (UIM) |
+| **Mata Kuliah** | Pemrograman Mobile |
+| **Dosen** | Rofi Uddin, S.Kom., M.Kom |
 
-### 1. **Splash Screen**
+---
+
+## 📝 DESKRIPSI PROYEK
+
+**Smart UIM** adalah aplikasi Learning Management System berbasis Flutter yang dirancang khusus untuk mahasiswa Universitas Islam Madura. Aplikasi ini menggunakan tema warna hijau yang konsisten dan modern dengan Material Design 3.
+
+---
+
+## ✨ FITUR UTAMA
+
+### 1. 🚀 **Splash Screen**
 - Animasi fade dan scale yang smooth
-- Logo CeLOE dengan background gradient hijau Telkom
-- Loading indicator
+- Logo Smart UIM dengan background gradient hijau
+- Auto-redirect ke Login setelah 3 detik
 
-### 2. **Login Screen**
-- Form login dengan validasi email dan password
+### 2. 🔐 **Login Screen**
+- Form login dengan validasi
 - Password visibility toggle
-- Informasi bantuan login dengan kontak CeLOE Helpdesk
-- Design modern dengan gradient header
+- Format email: username@uim.ac.id
+- Informasi bantuan IT Helpdesk UIM
 
-### 3. **Home/Dashboard**
-- Greeting dengan nama mahasiswa dan foto profil
+### 3. 🏠 **Home/Dashboard**
+- Greeting mahasiswa
 - Statistik kelas dan tugas aktif
 - Daftar tugas yang akan datang
-- Pengumuman terbaru dari admin
-- Progress kelas
-- Sliver app bar dengan animasi scroll
+- Pengumuman terbaru
+- Progress kelas dengan visualisasi
 
-### 4. **Kelas Saya (My Courses)**
-- Daftar semua kelas yang diikuti
-- Progress bar untuk setiap kelas
-- Informasi dosen dan jumlah mahasiswa
-- Card design yang modern dan informatif
+### 4. 📚 **Kelas Saya**
+- Daftar 7 mata kuliah:
+  1. Pemrograman Mobile (92%)
+  2. UI/UX Design (88%)
+  3. Basis Data (90%)
+  4. Jaringan Komputer (85%)
+  5. Algoritma & Struktur Data (91%)
+  6. Rekayasa Perangkat Lunak (87%)
+  7. Kecerdasan Buatan (89%)
 
-### 5. **Profile**
+### 5. 👤 **Profile Screen**
 - Informasi lengkap mahasiswa
 - Statistik kelas dan tugas
 - Menu pengaturan
-- Tombol logout dengan konfirmasi
+- Logout dengan konfirmasi
 
-### 6. **Bottom Navigation**
-- Navigasi mudah antara Home, Kelas Saya, dan Profile
+### 6. 🧭 **Bottom Navigation**
+- Navigasi mudah: Home, Kelas Saya, Profile
 - Icon yang jelas dengan animasi
 
-## 🎨 Design System
+---
 
-### Warna (Telkom University Green Theme)
-- **Primary**: `#009247` (Hijau Telkom)
+## 🎨 DESIGN SYSTEM
+
+### Skema Warna
+- **Primary Green**: `#009247`
 - **Primary Dark**: `#006B33`
 - **Primary Light**: `#33A669`
-- **Accent**: `#FDB515` (Emas)
+- **Accent Gold**: `#FDB515`
 - **Background**: `#F5F7FA`
 - **Surface**: `#FFFFFF`
 
 ### Typography
-- Font: **Inter** (Google Fonts)
-- Heading: Bold, sizes 24-32px
-- Body: Regular/Medium, sizes 14-16px
+- **Font**: Inter (Google Fonts)
+- **Heading**: 24-32px, Bold
+- **Body**: 14-16px, Regular
+- **Caption**: 12px, Regular
 
-### Components
-- Border radius: 12-16px untuk cards dan buttons
-- Shadow: Subtle shadows untuk depth
-- Gradient: Used untuk header dan primary elements
+---
 
-## 🏗️ Struktur Proyek
+## 🏗️ STRUKTUR PROYEK
 
 ```
-lib/
-├── constants/
-│   ├── app_colors.dart          # Color palette
-│   └── app_theme.dart           # Theme configuration
-├── models/
-│   ├── course.dart              # Course model
-│   ├── assignment.dart          # Assignment model
-│   └── announcement.dart        # Announcement model
-├── screens/
-│   ├── splash_screen.dart       # Splash screen
-│   ├── login_screen.dart        # Login page
-│   ├── main_screen.dart         # Main screen with bottom nav
-│   ├── home_screen.dart         # Dashboard/Home
-│   ├── courses_screen.dart      # My courses list
-│   └── profile_screen.dart      # User profile
-└── main.dart                     # App entry point
+smart_uim/
+├── lib/
+│   ├── main.dart
+│   ├── constants/
+│   │   ├── app_colors.dart
+│   │   └── app_theme.dart
+│   ├── models/
+│   │   ├── course.dart
+│   │   ├── assignment.dart
+│   │   └── announcement.dart
+│   └── screens/
+│       ├── splash_screen.dart
+│       ├── login_screen.dart
+│       ├── main_screen.dart
+│       ├── home_screen.dart
+│       ├── courses_screen.dart
+│       └── profile_screen.dart
+├── pubspec.yaml
+└── README.md
 ```
 
-## 📦 Dependencies
+---
+
+## 📦 DEPENDENCIES
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.2.1          # Typography
-  flutter_svg: ^2.0.10+1        # SVG support
-  intl: ^0.19.0                 # Date formatting
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
 ```
-
-## 🚀 Cara Menjalankan
-
-1. **Install Dependencies**
-   ```bash
-   cd lms_celoe_app
-   flutter pub get
-   ```
-
-2. **Run pada Chrome (Web)**
-   ```bash
-   flutter run -d chrome
-   ```
-
-3. **Run pada Android Emulator**
-   ```bash
-   flutter run -d emulator
-   ```
-
-4. **Build APK untuk Android**
-   ```bash
-   flutter build apk --release
-   ```
-
-## 📱 Screenshots
-
-### Splash Screen
-- Animasi loading dengan logo CeLOE
-- Background gradient hijau Telkom
-
-### Login Screen
-- Form login yang user-friendly
-- Validasi input
-- Informasi bantuan
-
-### Home Screen
-- Dashboard dengan statistik
-- Tugas yang akan datang
-- Pengumuman terbaru
-- Progress kelas
-
-### Courses Screen
-- Daftar kelas dengan detail
-- Progress tracking
-- Info dosen dan mahasiswa
-
-### Profile Screen
-- Informasi lengkap user
-- Statistik
-- Pengaturan
-- Logout
-
-## 🎯 Keunggulan Aplikasi
-
-1. **Design Premium**: Menggunakan warna hijau Telkom University yang konsisten
-2. **User Experience**: Navigasi intuitif dengan bottom navigation
-3. **Modern UI**: Material Design 3 dengan gradient dan shadow
-4. **Responsive**: Menyesuaikan dengan berbagai ukuran layar
-5. **Performant**: Smooth animations dan transitions
-6. **Clean Code**: Struktur kode yang terorganisir dengan baik
-
-## 📐 Design Principles
-
-1. **Consistency**: Warna, typography, dan spacing yang konsisten
-2. **Hierarchy**: Visual hierarchy yang jelas
-3. **Feedback**: Loading states dan validations
-4. **Accessibility**: Readable fonts dan good contrast ratio
-5. **Aesthetics**: Beautiful gradients, shadows, dan animations
-
-## 🔐 Kredensial Login (Demo)
-
-- **Email**: (Any valid email format)
-- **Password**: (Minimal 6 karakter)
-
-*Note: Ini adalah aplikasi demo, kredensial apapun yang valid akan diterima*
-
-## 📝 Catatan Pengembangan
-
-- Aplikasi ini dibuat mengikuti requirement tugas UAS
-- Menggunakan warna hijau sesuai identitas Telkom University
-- Semua data adalah data sample untuk demo
-- Siap untuk integrasi dengan backend API
-
-## 🎓 Referensi
-
-- Flutter Documentation: https://flutter.dev/docs
-- Material Design 3: https://m3.material.io
-- Google Fonts: https://fonts.google.com
-
-## 📞 Kontak
-
-**Dandy Candra Pratama**
-- Email: dandycandra@365.telkomuniversity.ac.id
-- Universitas: Telkom University
-- Fakultas: FIT
-- Prodi: D4 Teknologi Rekayasa Multimedia
 
 ---
 
-**© 2021 CeLOE - Telkom University**
-*Learning Management System Mobile Application*
+## 🚀 CARA MENJALANKAN
+
+### Prasyarat
+- Flutter SDK 3.0.0+
+- Dart SDK 3.0.0+
+- Chrome / Android Emulator
+
+### Langkah-langkah
+
+#### 1. Clone Repository
+```bash
+git clone https://github.com/siapaajaboleh888/UAS_Smart-UIM.git
+cd UAS_Smart-UIM
+```
+
+#### 2. Install Dependencies
+```bash
+flutter pub get
+```
+
+#### 3. Run Aplikasi
+
+**Di Chrome (Web):**
+```bash
+flutter run -d chrome
+```
+
+**Di Android Emulator:**
+```bash
+flutter run
+```
+
+**Build APK:**
+```bash
+flutter build apk --release
+```
+
+---
+
+## 🎯 PRINSIP UI/UX YANG DITERAPKAN
+
+### Design Principles:
+1. ✅ **Consistency** - Warna, font, dan spacing seragam
+2. ✅ **Visual Hierarchy** - Typography dan size yang jelas
+3. ✅ **Feedback** - Loading states dan validations
+4. ✅ **Accessibility** - Kontras warna yang baik
+5. ✅ **Aesthetics** - Gradient, shadows, dan animations
+
+### 20 Prinsip UI Design:
+- Clarity, Consistency, Hierarchy
+- Alignment, Proximity, Contrast
+- Repetition, White Space, Feedback
+- Affordance, Visibility, Flexibility
+- Efficiency, Learnability, Memorability
+- Error Prevention, Error Recovery
+- User Control, Aesthetic, Performance
+
+---
+
+## 📊 DATA MODEL
+
+### Course
+```dart
+- id, name, code, instructor
+- semester, progress, totalStudents
+```
+
+### Assignment
+```dart
+- id, title, courseCode, deadline
+- isSubmitted, fileName, grade
+```
+
+### Announcement
+```dart
+- id, title, content, author, date
+```
+
+---
+
+## 💡 FITUR TEKNIS
+
+- ✅ Animasi fade & scale
+- ✅ Form validation
+- ✅ State management (StatefulWidget)
+- ✅ Navigation (Navigator)
+- ✅ Material Design 3
+- ✅ Google Fonts (Inter)
+- ✅ Responsive layout
+- ✅ Custom theme
+- ✅ Gradient backgrounds
+- ✅ Progress indicators
+
+---
+
+## 📱 SCREENSHOT
+
+### Splash Screen
+![Splash](screenshots/splash.png)
+
+### Login
+![Login](screenshots/login.png)
+
+### Home
+![Home](screenshots/home.png)
+
+### Courses
+![Courses](screenshots/courses.png)
+
+### Profile
+![Profile](screenshots/profile.png)
+
+---
+
+## ✅ STATUS
+
+- **Development**: ✅ Complete
+- **Testing**: ✅ Passed
+- **Documentation**: ✅ Complete
+- **Deployment**: ✅ Ready
+
+---
+
+## 📝 CHANGELOG
+
+### Version 1.0.0 (15 Desember 2025)
+- ✅ Initial release
+- ✅ Splash screen dengan animasi
+- ✅ Login screen dengan validasi
+- ✅ Home dashboard lengkap
+- ✅  7 mata kuliah
+- ✅ Profile screen
+- ✅ Bottom navigation
+- ✅ Warna hijau branding
+- ✅ Material Design 3
+
+---
+
+## 🎓 UNTUK TUGAS
+
+**Mata Kuliah**: Pemrograman Mobile  
+**Dosen**: Rofi Uddin, S.Kom., M.Kom  
+**Semester**: Genap 2024/2025  
+**Deadline**: 31 Desember 2025, 23:59 WIB  
+
+---
+
+## 📞 KONTAK
+
+**Moh. Syaiful Anam**  
+- Email: syaifulanam@uim.ac.id
+- NIM: 2022020100078
+- Prodi: Teknik Informatika
+- Universitas: Universitas Islam Madura
+
+---
+
+## 📄 LICENSE
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+---
+
+## 🙏 ACKNOWLEDGMENTS
+
+- Flutter Team
+- Material Design Team
+- Google Fonts
+- Universitas Islam Madura
+- Rofi Uddin, S.Kom., M.Kom (Dosen Pembimbing)
+
+---
+
+**© 2024 Smart UIM - Universitas Islam Madura**  
+_Learning Management System Mobile Application_
+
+---
+
+## 🌟 STAR THIS REPO!
+
+If you find this project useful, please give it a ⭐️!
+
+[![GitHub stars](https://img.shields.io/github/stars/siapaajaboleh888/UAS_Smart-UIM?style=social)](https://github.com/siapaajaboleh888/UAS_Smart-UIM/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/siapaajaboleh888/UAS_Smart-UIM?style=social)](https://github.com/siapaajaboleh888/UAS_Smart-UIM/network/members)
