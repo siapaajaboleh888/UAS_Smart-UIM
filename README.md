@@ -298,7 +298,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-**© 2024 Smart UIM - Universitas Islam Madura**  
+**© 2025 Smart UIM - Universitas Islam Madura**  
 _Learning Management System Mobile Application_
 
 ---
