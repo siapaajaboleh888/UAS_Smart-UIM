@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 
 class UserService {
@@ -5,43 +7,145 @@ class UserService {
   factory UserService() => _instance;
   UserService._internal();
 
-  // Simulated user storage (in real app, use SharedPreferences or database)
-  UserModel? _currentUser;
-  final List<UserModel> _registeredUsers = [];
+  // Storage keys
+  static const String _keyCurrentUser = 'current_user';
+  static const String _keyRegisteredUsers = 'registered_users';
 
   // Current logged in user
+  UserModel? _currentUser;
+  final List<UserModel> _registeredUsers = [];
+  bool _isInitialized = false;
+
   UserModel? get currentUser => _currentUser;
+  List<UserModel> get registeredUsers => List.unmodifiable(_registeredUsers);
+
+  // Initialize and load data
+  Future<void> _initialize() async {
+    if (_isInitialized) return;
+    await _loadData();
+    _isInitialized = true;
+  }
+
+  // Load data from SharedPreferences
+  Future<void> _loadData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      // Load registered users FIRST
+      final registeredUsersJson = prefs.getString(_keyRegisteredUsers);
+      if (registeredUsersJson != null) {
+        final List<dynamic> usersList = jsonDecode(registeredUsersJson);
+        _registeredUsers.clear();
+        _registeredUsers.addAll(
+          usersList.map((json) => UserModel.fromMap(json)).toList(),
+        );
+        print('✅ Loaded ${_registeredUsers.length} registered users');
+        for (var user in _registeredUsers) {
+          print('   - ${user.nama} (${user.nim})');
+        }
+      }
+      
+      // Load current user
+      final currentUserJson = prefs.getString(_keyCurrentUser);
+      if (currentUserJson != null) {
+        _currentUser = UserModel.fromMap(jsonDecode(currentUserJson));
+        print('✅ Loaded current user: ${_currentUser?.nama}');
+      }
+    } catch (e) {
+      print('❌ Error loading user data: $e');
+    }
+  }
+
+  // Save data to SharedPreferences
+  Future<void> _saveData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      // Save current user
+      if (_currentUser != null) {
+        await prefs.setString(
+          _keyCurrentUser,
+          jsonEncode(_currentUser!.toMap()),
+        );
+        print('✅ Saved current user: ${_currentUser!.nama}');
+      } else {
+        await prefs.remove(_keyCurrentUser);
+      }
+      
+      // Save registered users
+      final usersJson = _registeredUsers.map((user) => user.toMap()).toList();
+      await prefs.setString(
+        _keyRegisteredUsers,
+        jsonEncode(usersJson),
+      );
+      print('✅ Saved ${_registeredUsers.length} registered users');
+    } catch (e) {
+      print('❌ Error saving user data: $e');
+    }
+  }
 
   // Register new user
   Future<bool> registerUser(UserModel user) async {
     try {
+      // Initialize if needed
+      await _initialize();
+      
       // Check if NIM already exists
       final exists = _registeredUsers.any((u) => u.nim == user.nim);
       if (exists) {
+        print('❌ User with NIM ${user.nim} already exists');
         return false;
       }
 
       // Check if email already exists
       final emailExists = _registeredUsers.any((u) => u.email == user.email);
       if (emailExists) {
+        print('❌ User with email ${user.email} already exists');
         return false;
       }
 
       // Add user to registered users
       _registeredUsers.add(user);
+      print('✅ Registered new user: ${user.nama} (${user.nim})');
+      
+      // Save to persistent storage
+      await _saveData();
+      
       return true;
     } catch (e) {
+      print('❌ Error registering user: $e');
       return false;
     }
   }
 
   // Login user
-  Future<UserModel?> login(String nim, String password) async {
+  Future<UserModel?> login(String emailOrNim, String password) async {
     try {
-      // Try to find user by NIM
-      final user = _registeredUsers.firstWhere(
-        (u) => u.nim == nim,
-        orElse: () => UserModel(
+      // ALWAYS reload data to get latest
+      print('🔄 Reloading user data...');
+      await _loadData();
+      
+      print('🔍 Looking for user with: $emailOrNim');
+      print('📊 Total registered users: ${_registeredUsers.length}');
+      
+      // Try to find user by email or NIM
+      UserModel? user;
+      
+      try {
+        user = _registeredUsers.firstWhere(
+          (u) {
+            final matches = u.email.toLowerCase() == emailOrNim.toLowerCase() || 
+                          u.nim == emailOrNim;
+            if (matches) {
+              print('✅ Found matching user: ${u.nama}');
+            }
+            return matches;
+          },
+        );
+      } catch (e) {
+        print('⚠️ User not found in registered users, using default');
+        // If no registered user found, use default user
+        user = UserModel(
           nim: '2022020100078',
           nama: 'MOH. SYAIFUL ANAM',
           email: 'syaifulanam@uim.ac.id',
@@ -49,19 +153,26 @@ class UserService {
           prodi: 'Teknik Informatika',
           angkatan: '2022',
           role: 'MAHASISWA',
-        ),
-      );
+        );
+      }
 
+      // Set as current user
       _currentUser = user;
+      await _saveData();
+      
+      print('✅ Login successful: ${user.nama}');
       return user;
     } catch (e) {
+      print('❌ Error during login: $e');
       return null;
     }
   }
 
   // Logout
-  void logout() {
+  Future<void> logout() async {
     _currentUser = null;
+    await _saveData();
+    print('✅ Logged out');
   }
 
   // Get user by NIM
@@ -76,5 +187,26 @@ class UserService {
   // Check if user exists
   bool userExists(String nim) {
     return _registeredUsers.any((u) => u.nim == nim);
+  }
+
+  // Clear all data (for testing)
+  Future<void> clearAllData() async {
+    _currentUser = null;
+    _registeredUsers.clear();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyCurrentUser);
+    await prefs.remove(_keyRegisteredUsers);
+    print('✅ All data cleared');
+  }
+
+  // Get total registered users count
+  int get totalUsers => _registeredUsers.length;
+  
+  // Debug: Print all users
+  void printAllUsers() {
+    print('📋 All registered users (${_registeredUsers.length}):');
+    for (var user in _registeredUsers) {
+      print('   - ${user.nama} | ${user.email} | ${user.nim}');
+    }
   }
 }
