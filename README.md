@@ -125,6 +125,48 @@ dependencies:
 
 ---
 
+## 🗄️ DATABASE SETUP
+
+Smart UIM menggunakan MySQL database untuk menyimpan data. Berikut adalah cara setup database:
+
+### Database Schema
+- **Nama Database**: `smart_uim`
+- **Tables**: 9 tabel utama (users, courses, enrollments, materials, assignments, submissions, quizzes, announcements, attendance)
+- **Sample Data**: Tersedia user default untuk testing
+
+### Cara Import Database
+
+#### Option 1: Auto Import (Recommended)
+```powershell
+cd database
+.\import_database.ps1
+```
+Pilih mode:
+- **[1] Full Schema** - Database lengkap dengan sample data
+- **[2] Quick Setup** - Database minimal untuk testing cepat
+
+#### Option 2: Manual Import (phpMyAdmin)
+1. Buka XAMPP Control Panel
+2. Start Apache dan MySQL
+3. Buka `http://localhost/phpmyadmin`
+4. Import file `database/smart_uim_schema.sql`
+
+#### Option 3: MySQL CLI
+```bash
+mysql -u root -p < database/smart_uim_schema.sql
+```
+
+### Default User Accounts
+| Role | Username | Password | Email |
+|------|----------|----------|-------|
+| Admin | `admin` | `password` | admin@uim.ac.id |
+| Dosen | `dosen1` | `password` | dosen1@uim.ac.id |
+| Mahasiswa | `2022020100078` | `password` | syaiful@student.uim.ac.id |
+
+> 📖 **Detail lengkap**: Lihat `database/PANDUAN_DATABASE.md`
+
+---
+
 ## 🚀 CARA MENJALANKAN
 
 ### Prasyarat
