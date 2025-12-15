@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Smart UIM LMS',
+                        'Smart UIM',
                         style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -226,6 +226,82 @@ class _LoginScreenState extends State<LoginScreen> {
                                   'Login',
                                   style: TextStyle(fontSize: 18),
                                 ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // Divider with text
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(color: AppColors.textLight.withOpacity(0.3)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              'atau',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(color: AppColors.textLight.withOpacity(0.3)),
+                          ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // Register Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // Navigate to register screen
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Fitur registrasi akan segera hadir!'),
+                                backgroundColor: AppColors.info,
+                              ),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: AppColors.primary, width: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.person_add_outlined, color: AppColors.primary),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Daftar Akun Baru',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 24),
+                      
+                      // Help text for registration
+                      Center(
+                        child: Text(
+                          'Belum punya akun? Daftar sebagai mahasiswa baru',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       
