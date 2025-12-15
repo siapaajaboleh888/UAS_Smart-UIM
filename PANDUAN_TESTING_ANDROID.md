@@ -1,120 +1,267 @@
-# 📱 PANDUAN TESTING APLIKASI DI ANDROID DEVICE
+# 📱 Panduan Testing di HP Android
 
-## Langkah 1: Persiapan HP Android
+## ✅ Perubahan yang Sudah Dilakukan
 
-### Enable USB Debugging:
-1. Settings → About Phone
-2. Tap "Build Number" 7x
-3. Settings → Developer Options
-4. Enable "USB Debugging"
+### 1. Update Branding ✅
+- **Sebelum**: "Smart UIM LMS"
+- **Setelah**: "Smart UIM" (lebih clean dan simple)
 
-### Connect ke Laptop:
-1. Colokkan USB cable
-2. Pilih "File Transfer" mode
-3. Allow USB Debugging
+### 2. Fitur Baru: Tombol Register ✅
+- Tombol "Daftar Akun Baru" dengan icon person_add
+- Style: Outlined button (hijau border)
+- Divider dengan text "atau"
+- Helper text: "Belum punya akun? Daftar sebagai mahasiswa baru"
+- Saat ini menampilkan snackbar info (fitur akan segera hadir)
 
 ---
 
-## Langkah 2: Check Device
+## 🚀 Cara Testing di HP Android
 
-```powershell
+### **Metode 1: Install APK Debug** (Recommended)
+
+#### 1. Build APK
+```bash
 cd "e:\SEMESTER 7\Flutter\UAS\lms_celoe_app"
-flutter devices
+flutter build apk --debug
 ```
 
-Output yang diharapkan:
+**Output**: `build\app\outputs\flutter-apk\app-debug.apk`
+
+#### 2. Transfer APK ke HP
+**Pilihan A: Via USB Cable**
+- Hubungkan HP ke laptop via USB
+- Copy file APK ke folder Download HP
+- Buka File Manager di HP → Download
+- Tap file APK → Install
+
+**Pilihan B: Via Google Drive/WhatsApp**
+- Upload APK ke Google Drive
+- Buka di HP → Download → Install
+
+**Pilihan C: Via ADB**
+```bash
+adb install build\app\outputs\flutter-apk\app-debug.apk
 ```
-Found 2 devices:
-  Android SDK built for x86 (mobile) • emulator-5554 • android-x86 • Android 11 (API 30)
-  Chrome (web)                       • chrome        • web-javascript • Google Chrome
-  [Your Device Name] (mobile)        • XXXXXX        • android-arm64  • Android XX
-```
+
+#### 3. Enable Install from Unknown Sources
+Di HP Android:
+- Buka **Settings** → **Security**
+- Enable **Install from Unknown Sources**
+- Atau beri izin saat diminta install
 
 ---
 
-## Langkah 3: Run di Android
+### **Metode 2: Flutter Run via USB** (Development Mode)
 
-### Method 1: Auto-detect
-```powershell
+#### 1. Enable Developer Options di HP
+1. Buka **Settings** → **About Phone**
+2. Tap **Build Number** 7x hingga muncul "You are now a developer"
+3. Kembali ke Settings → **Developer Options**
+4. Enable **USB Debugging**
+
+#### 2. Hubungkan HP via USB
+```bash
+# Cek device terdeteksi
+flutter devices
+
+# Expected output:
+# Vivo 1906 • xxxxx • android-arm64 • Android 11 (API 30)
+```
+
+#### 3. Run Flutter
+```bash
+cd "e:\SEMESTER 7\Flutter\UAS\lms_celoe_app"
 flutter run
-# Flutter akan otomatis pilih device yang tersedia
 ```
 
-### Method 2: Pilih device spesifik
-```powershell
-# List devices dulu
-flutter devices
+Pilih device HP Anda dari list
 
-# Run di device tertentu
-flutter run -d [device-id]
-# Contoh: flutter run -d emulator-5554
+---
+
+### **Metode 3: Wireless Debugging** (Android 11+)
+
+#### 1. Enable Wireless Debugging
+- Settings → Developer Options → **Wireless Debugging** → ON
+- Tap **Pair device with pairing code**
+- Catat IP dan Port
+
+#### 2. Pair dari Laptop
+```bash
+adb pair <IP>:<PORT>
+# Masukkan pairing code dari HP
+
+# Connect
+adb connect <IP>:<PORT>
+```
+
+#### 3. Run Flutter
+```bash
+flutter run
 ```
 
 ---
 
-## Langkah 4: Install APK Release
+## 🧪 Test Checklist
 
-Untuk install permanent di HP:
+Setelah aplikasi berjalan di HP, test hal berikut:
 
-```powershell
-# Build APK release
-flutter build apk --release
+### ✅ Login Screen
+- [ ] Logo Smart UIM tampil dengan benar
+- [ ] Text "Smart UIM" (bukan "Smart UIM LMS")
+- [ ] Text "Universitas Islam Madura" tampil
+- [ ] Form Email dan Password bisa diisi
+- [ ] Icon lock dan email tampil
+- [ ] Toggle password visibility berfungsi
+- [ ] Tombol "Login" bisa diklik
+- [ ] Loading indicator muncul saat login
+- [ ] **Tombol "Daftar Akun Baru" tampil** ✅ NEW
+- [ ] **Divider "atau" tampil** ✅ NEW
+- [ ] **Text helper "Belum punya akun?" tampil** ✅ NEW
+- [ ] Tap "Daftar Akun Baru" → Muncul snackbar
+- [ ] Card "Bantuan Login" tampil
+- [ ] Scroll halaman berfungsi dengan lancar
 
-# Lokasi APK:
-# e:\SEMESTER 7\Flutter\UAS\lms_celoe_app\build\app\outputs\flutter-apk\app-release.apk
-```
+### ✅ Setelah Login
+- [ ] Navigasi ke Home/Dashboard
+- [ ] Bottom navigation bar tampil
+- [ ] Semua fitur berfungsi
 
-Transfer APK ke HP dan install!
+### ✅ Performance
+- [ ] Aplikasi berjalan smooth (tidak lag)
+- [ ] Animasi berjalan dengan baik
+- [ ] Tidak ada crash atau force close
+- [ ] Memory usage wajar
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Device tidak terdeteksi?
-```powershell
-# Restart ADB
-flutter doctor
+### Error: "App not installed"
+**Solusi**:
+- Uninstall aplikasi lama (jika ada)
+- Enable Install from Unknown Sources
+- Pastikan APK tidak corrupt
+
+### Error: "Device not found"
+**Solusi**:
+```bash
+# Cek koneksi USB
+adb devices
+
+# Restart adb server
 adb kill-server
 adb start-server
-adb devices
+
+# Cek lagi
+flutter devices
 ```
 
-### Error saat build?
-```powershell
-# Clean project
-flutter clean
-flutter pub get
+### Error: SDK version mismatch
+**Solusi**: Pastikan minSdkVersion di `android/app/build.gradle.kts` sesuai dengan Android HP Anda
+
+### HP tidak terdeteksi via USB
+**Solusi**:
+1. Instal driver HP
+2. Gunakan kabel USB original
+3. Pilih mode "File Transfer" di HP
+4. Enable USB Debugging ulang
+
+---
+
+## 📊 Spesifikasi HP yang Didukung
+
+**Minimum Requirements**:
+- Android 5.0 (Lollipop) / API Level 21+
+- RAM: 2GB+
+- Storage: 100MB free space
+
+**Recommended**:
+- Android 8.0 (Oreo) / API Level 26+
+- RAM: 4GB+
+- Storage: 500MB free space
+
+---
+
+## 📸 Screenshot untuk Laporan
+
+Capture screenshot dari HP untuk dokumentasi:
+
+1. **Splash Screen** (jika ada)
+2. **Login Screen** dengan tombol Register ✅
+3. **Home/Dashboard**
+4. **Halaman Kelas**
+5. **Profile Screen**
+6. **Bottom Navigation**
+
+---
+
+## 🎯 Performa yang Diharapkan
+
+| Feature | Expected Behavior |
+|---------|------------------|
+| **Startup Time** | < 3 detik |
+| **Screen Transition** | Smooth, < 300ms |
+| **Button Response** | Instant |
+| **Scroll** | 60 FPS |
+| **Memory Usage** | < 200MB |
+
+---
+
+## 🚀 Quick Commands
+
+```bash
+# Build APK Debug
+flutter build apk --debug
+
+# Build APK Release (untuk distribusi)
+flutter build apk --release
+
+# Run di device yang terkoneksi
 flutter run
+
+# Run dengan hot reload
+flutter run --hot
+
+# Cek device
+flutter devices
+
+# Cek logs
+flutter logs
+
+# Clean build
+flutter clean && flutter pub get
 ```
 
-### Aplikasi lag di debug mode?
-```powershell
-# Build release mode (lebih cepat)
-flutter run --release
+---
+
+## ✅ Status Commit
+
+**Commit Hash**: `3a2d62a`  
+**Branch**: `main`  
+**Status**: ✅ **Pushed to GitHub**
+
+**Commit Message**:
+```
+feat: Update login screen branding and add registration button
+
+- Changed app title from 'Smart UIM LMS' to 'Smart UIM'
+- Added 'Daftar Akun Baru' (Register) button
+- Added divider with 'atau' text
+- Ready for Android device testing
 ```
 
 ---
 
-## ✅ Testing Checklist
+## 📞 Support
 
-- [ ] Splash screen muncul dengan animasi
-- [ ] Login form berfungsi dengan validasi
-- [ ] Home screen menampilkan data
-- [ ] Bottom navigation berfungsi
-- [ ] Courses screen menampilkan 7 mata kuliah
-- [ ] Profile screen menampilkan info yang benar
-- [ ] Logout berfungsi dengan konfirmasi
+Jika ada error atau pertanyaan:
+- Cek logs: `flutter logs`
+- Screenshot error message
+- Cek versi Flutter: `flutter doctor -v`
 
 ---
 
-## 📝 Notes
+**Last Updated**: 15 Desember 2025, 23:51 WIB  
+**Ready for**: Android Device Testing 📱
 
-- **Debug mode**: Slower tapi bisa hot reload
-- **Release mode**: Faster, ukuran APK lebih kecil
-- **Profile mode**: Untuk performance testing
-
----
-
-**Good Luck Testing! 🚀**
-
-_© 2025 Smart UIM - Universitas Islam Madura_
+**Selamat Testing! 🚀**
