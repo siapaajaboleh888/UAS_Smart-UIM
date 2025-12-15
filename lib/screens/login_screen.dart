@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../services/user_service.dart';
 import 'main_screen.dart';
 import 'register_screen.dart';
 
@@ -28,14 +29,30 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
+      // Use UserService for login
+      final userService = UserService();
+      final user = await userService.login(
+        _emailController.text,
+        _passwordController.text,
+      );
       
       if (mounted) {
         setState(() => _isLoading = false);
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MainScreen()),
-        );
+        
+        if (user != null) {
+          // Login successful
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          );
+        } else {
+          // Login failed
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login gagal! Periksa email dan password Anda.'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
       }
     }
   }

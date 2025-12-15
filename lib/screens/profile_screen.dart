@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../services/user_service.dart';
+import '../models/user_model.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -7,6 +9,18 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get current user from UserService
+    final userService = UserService();
+    final UserModel? currentUser = userService.currentUser;
+
+    // Default values if no user logged in
+    final String userName = currentUser?.nama ?? 'MOH. SYAIFUL ANAM';
+    final String userInitials = currentUser?.getInitials() ?? 'MS';
+    final String userRole = currentUser?.role ?? 'MAHASISWA';
+    final String userEmail = currentUser?.email ?? 'syaifulanam@uim.ac.id';
+    final String userNim = currentUser?.nim ?? '2022020100078';
+    final String userProdi = currentUser?.prodi ?? 'Teknik Informatika';
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -35,12 +49,12 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.white,
                         child: Text(
-                          'MS',
-                          style: TextStyle(
+                          userInitials,
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
@@ -67,9 +81,9 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'MOH. SYAIFUL ANAM',
-                    style: TextStyle(
+                  Text(
+                    userName,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -78,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'MAHASISWA',
+                    userRole,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white.withOpacity(0.9),
@@ -105,19 +119,19 @@ class ProfileScreen extends StatelessWidget {
                   
                   _buildInfoCard(
                     'Email address',
-                    'syaifulanam@uim.ac.id',
+                    userEmail,
                     Icons.email_outlined,
                   ),
                   
                   _buildInfoCard(
                     'NIM',
-                    '2022020100078',
+                    userNim,
                     Icons.badge_outlined,
                   ),
                   
                   _buildInfoCard(
                     'Program Studi',
-                    'Teknik Informatika',
+                    userProdi,
                     Icons.school_outlined,
                   ),
                   

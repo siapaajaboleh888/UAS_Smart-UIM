@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constants/app_colors.dart';
+import '../services/user_service.dart';
+import '../models/user_model.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -67,8 +69,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
-      // Simulate API call untuk registrasi
-      await Future.delayed(const Duration(seconds: 2));
+      // Create user model from form data
+      final newUser = UserModel(
+        nim: _nimController.text,
+        nama: _namaController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        prodi: _selectedProdi!,
+        angkatan: _selectedAngkatan!,
+        role: 'MAHASISWA',
+      );
+      
+      // Register user using UserService
+      final userService = UserService();
+      final success = await userService.registerUser(newUser);
+      
+      // Simulate network delay
+      await Future.delayed(const Duration(seconds: 1));
       
       if (mounted) {
         setState(() => _isLoading = false);
