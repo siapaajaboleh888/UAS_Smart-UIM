@@ -23,7 +23,27 @@ class UserService {
   Future<void> _initialize() async {
     if (_isInitialized) return;
     await _loadData();
+    await _initializeDefaultUsers();
     _isInitialized = true;
+  }
+
+  // Initialize default users if needed
+  Future<void> _initializeDefaultUsers() async {
+    // Add default user if no users exist
+    if (_registeredUsers.isEmpty) {
+      final defaultUser = UserModel(
+        nim: '2022020100078',
+        nama: 'MOH. SYAIFUL ANAM',
+        email: 'syaifulanam@uim.ac.id',
+        phone: '082334455667',
+        prodi: 'Teknik Informatika',
+        angkatan: '2022',
+        role: 'MAHASISWA',
+      );
+      _registeredUsers.add(defaultUser);
+      await _saveData();
+      print('✅ Initialized default user: ${defaultUser.nama}');
+    }
   }
 
   // Load data from SharedPreferences
@@ -137,26 +157,18 @@ class UserService {
             final matches = u.email.toLowerCase() == emailOrNim.toLowerCase() || 
                           u.nim == emailOrNim;
             if (matches) {
-              print('✅ Found matching user: ${u.nama}');
+              print('✅ Found matching user: ${u.nama} (${u.nim})');
             }
             return matches;
           },
         );
       } catch (e) {
-        print('⚠️ User not found in registered users, using default');
-        // If no registered user found, use default user
-        user = UserModel(
-          nim: '2022020100078',
-          nama: 'MOH. SYAIFUL ANAM',
-          email: 'syaifulanam@uim.ac.id',
-          phone: '082334455667',
-          prodi: 'Teknik Informatika',
-          angkatan: '2022',
-          role: 'MAHASISWA',
-        );
+        print('❌ User not found in registered users');
+        // User not found - return null (login failed)
+        return null;
       }
 
-      // Set as current user
+      // User found - set as current user
       _currentUser = user;
       await _saveData();
       

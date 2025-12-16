@@ -14,12 +14,14 @@ class ProfileScreen extends StatelessWidget {
     final UserModel? currentUser = userService.currentUser;
 
     // Default values if no user logged in
-    final String userName = currentUser?.nama ?? 'MOH. SYAIFUL ANAM';
-    final String userInitials = currentUser?.getInitials() ?? 'MS';
-    final String userRole = currentUser?.role ?? 'MAHASISWA';
-    final String userEmail = currentUser?.email ?? 'syaifulanam@uim.ac.id';
-    final String userNim = currentUser?.nim ?? '2022020100078';
-    final String userProdi = currentUser?.prodi ?? 'Teknik Informatika';
+    final String userName = currentUser?.nama ?? 'Guest User';
+    final String userInitials = currentUser?.getInitials() ?? 'GU';
+    final String userRole = currentUser?.role ?? 'GUEST';
+    final String userEmail = currentUser?.email ?? '-';
+    final String userNim = currentUser?.nim ?? '-';
+    final String userProdi = currentUser?.prodi ?? '-';
+    final String userAngkatan = currentUser?.angkatan ?? '-';
+    final String userPhone = currentUser?.phone ?? '-';
     
     return Scaffold(
       appBar: AppBar(
@@ -133,6 +135,18 @@ class ProfileScreen extends StatelessWidget {
                     'Program Studi',
                     userProdi,
                     Icons.school_outlined,
+                  ),
+                  
+                  _buildInfoCard(
+                    'Angkatan',
+                    userAngkatan,
+                    Icons.calendar_today_outlined,
+                  ),
+                  
+                  _buildInfoCard(
+                    'Nomor Telepon',
+                    userPhone,
+                    Icons.phone_outlined,
                   ),
                   
                   _buildInfoCard(

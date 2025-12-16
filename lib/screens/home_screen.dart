@@ -3,6 +3,8 @@ import '../constants/app_colors.dart';
 import '../models/course.dart';
 import '../models/assignment.dart';
 import '../models/announcement.dart';
+import '../services/user_service.dart';
+import '../models/user_model.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,6 +12,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get current user from UserService
+    final userService = UserService();
+    final UserModel? currentUser = userService.currentUser;
+    
+    // Extract user details
+    final String userName = currentUser?.nama.toUpperCase() ?? 'USER';
+    final String userInitials = currentUser?.getInitials() ?? 'U';
+    final String userRole = currentUser?.role ?? 'GUEST';
+    
     final courses = Course.getSampleCourses();
     final assignments = Assignment.getSampleAssignments();
     final announcements = Announcement.getSampleAnnouncements();
@@ -40,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                               radius: 30,
                               backgroundColor: Colors.white,
                               child: Text(
-                                'MS',
+                                userInitials,
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
@@ -59,14 +70,14 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    'MOH. SYAIFUL ANAM',
+                                    userName,
                                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    'MAHASISWA',
+                                    userRole,
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                       color: Colors.white.withOpacity(0.8),
                                     ),
