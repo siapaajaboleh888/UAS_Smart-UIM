@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
 import 'login_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+  
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +33,9 @@ class ProfileScreen extends StatelessWidget {
     final userService = UserService();
     final UserModel? currentUser = userService.currentUser;
 
-    // Default values if no user logged in
-    final String userName = currentUser?.nama ?? 'Guest User';
+    // User data
+    final String userName = currentUser?.nama.toUpperCase() ?? 'GUEST USER';
     final String userInitials = currentUser?.getInitials() ?? 'GU';
-    final String userRole = currentUser?.role ?? 'GUEST';
     final String userEmail = currentUser?.email ?? '-';
     final String userNim = currentUser?.nim ?? '-';
     final String userProdi = currentUser?.prodi ?? '-';
@@ -24,65 +43,52 @@ class ProfileScreen extends StatelessWidget {
     final String userPhone = currentUser?.phone ?? '-';
     
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header with gradient
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+      body: Column(
+        children: [
+          // Header with profile photo
+          Container(
+            decoration: const BoxDecoration(
+              gradient: AppColors.primaryGradient,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
+            ),
+            child: SafeArea(
+              bottom: false,
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Colors.white,
-                        child: Text(
-                          userInitials,
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
+                  // Back button and title
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () => Navigator.pop(context),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
+                        const Spacer(),
+                      ],
+                    ),
                   ),
+                  
+                  // Profile photo
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child: Text(
+                      userInitials,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  
                   const SizedBox(height: 16),
+                  
+                  // User name
                   Text(
                     userName,
                     style: const TextStyle(
@@ -92,193 +98,349 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    userRole,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // User Information
-                  const Text(
-                    'Informasi User',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  _buildInfoCard(
-                    'Email address',
-                    userEmail,
-                    Icons.email_outlined,
-                  ),
-                  
-                  _buildInfoCard(
-                    'NIM',
-                    userNim,
-                    Icons.badge_outlined,
-                  ),
-                  
-                  _buildInfoCard(
-                    'Program Studi',
-                    userProdi,
-                    Icons.school_outlined,
-                  ),
-                  
-                  _buildInfoCard(
-                    'Angkatan',
-                    userAngkatan,
-                    Icons.calendar_today_outlined,
-                  ),
-                  
-                  _buildInfoCard(
-                    'Nomor Telepon',
-                    userPhone,
-                    Icons.phone_outlined,
-                  ),
-                  
-                  _buildInfoCard(
-                    'Universitas',
-                    'Universitas Islam Madura',
-                    Icons.business_outlined,
-                  ),
                   
                   const SizedBox(height: 24),
                   
-                  // Stats Section
-                  const Text(
-                    'Statistik',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  // Tab bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      labelColor: AppColors.primary,
+                      unselectedLabelColor: Colors.white,
+                      labelStyle: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      tabs: const [
+                        Tab(text: 'About Me'),
+                        Tab(text: 'Tasks'),
+                        Tab(text: 'Edit Profile'),
+                      ],
                     ),
                   ),
+                  
                   const SizedBox(height: 16),
-                  
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatBox(
-                          '7',
-                          'Kelas Aktif',
-                          Icons.class_outlined,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildStatBox(
-                          '3',
-                          'Tugas Selesai',
-                          Icons.assignment_turned_in_outlined,
-                        ),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Settings Section
-                  const Text(
-                    'Pengaturan',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  _buildSettingItem(
-                    context,
-                    'Edit Profile',
-                    Icons.person_outline,
-                    () {},
-                  ),
-                  
-                  _buildSettingItem(
-                    context,
-                    'Ganti Password',
-                    Icons.lock_outline,
-                    () {},
-                  ),
-                  
-                  _buildSettingItem(
-                    context,
-                    'Notifikasi',
-                    Icons.notifications_outlined,
-                    () {},
-                  ),
-                  
-                  _buildSettingItem(
-                    context,
-                    'Bantuan',
-                    Icons.help_outline,
-                    () {},
-                  ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Logout Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _showLogoutDialog(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.logout, color: Colors.white),
-                          SizedBox(width: 8),
-                          Text(
-                            'Log Out',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          
+          // Tab content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // About Me Tab
+                _buildAboutMeTab(
+                  userName: userName,
+                  userEmail: userEmail,
+                  userNim: userNim,
+                  userProdi: userProdi,
+                  userAngkatan: userAngkatan,
+                  userPhone: userPhone,
+                ),
+                
+                // Tasks Tab
+                _buildTasksTab(),
+                
+                // Edit Profile Tab
+                _buildEditProfileTab(context),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
-
-  Widget _buildInfoCard(String label, String value, IconData icon) {
+  
+  Widget _buildAboutMeTab({
+    required String userName,
+    required String userEmail,
+    required String userNim,
+    required String userProdi,
+    required String userAngkatan,
+    required String userPhone,
+  }) {
+    final now = DateTime.now();
+    final loginTime = DateFormat('EEEE, dd MMM yyyy, h:mm a', 'id_ID').format(now);
+    
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Informasi User
+          _buildSectionTitle('Informasi User'),
+          const SizedBox(height: 12),
+          _buildInfoItem('Email address', userEmail),
+          _buildInfoItem('Nomor Induk Mahasiswa', userNim),
+          
+          const SizedBox(height: 24),
+          
+          // Jadwal Kuliah
+          _buildSectionTitle('Jadwal Kuliah'),
+          const SizedBox(height: 12),
+          _buildInfoItem(
+            'Hari Terjadwal Kuliah', 
+            'Selasa, Rabu, Kamis (9:30 AM s/d 11:00 PM [3 Hari])',
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Website
+          _buildSectionTitle('Website'),
+          const SizedBox(height: 12),
+          _buildInfoItem('URL', 'uim.ac.id'),
+          
+          const SizedBox(height: 24),
+          
+          // Aktivitas Login
+          _buildSectionTitle('Aktivitas Login'),
+          const SizedBox(height: 12),
+          _buildInfoItem('First access to site', 'Minggu, 15 Des 2024, 8:45 AM'),
+          _buildInfoItem('Last access to site', loginTime),
+          
+          const SizedBox(height: 32),
+          
+          // Logout Button
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => _showLogoutDialog(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.logout, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    'Log Out',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTasksTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Tugas Aktif'),
+          const SizedBox(height: 16),
+          
+          _buildTaskCard(
+            'Pemrograman Mobile',
+            'UAS - Membuat Aplikasi LMS',
+            'Deadline: 20 Des 2024',
+            Icons.code,
+            false,
+          ),
+          
+          _buildTaskCard(
+            'Basis Data',
+            'Tugas 3 - Normalisasi Database',
+            'Deadline: 18 Des 2024',
+            Icons.storage,
+            false,
+          ),
+          
+          _buildTaskCard(
+            'Jaringan Komputer',
+            'Praktek - Konfigurasi Router',
+            'Deadline: 22 Des 2024',
+            Icons.router,
+            false,
+          ),
+          
+          const SizedBox(height: 24),
+          _buildSectionTitle('Tugas Selesai'),
+          const SizedBox(height: 16),
+          
+          _buildTaskCard(
+            'Pemrograman Web',
+            'Tugas 2 - Laravel CRUD',
+            'Selesai: 15 Des 2024',
+            Icons.web,
+            true,
+          ),
+          
+          _buildTaskCard(
+            'Algoritma',
+            'Quiz 1 - Sorting Algorithm',
+            'Selesai: 10 Des 2024',
+            Icons.quiz,
+            true,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildEditProfileTab(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Edit Informasi'),
+          const SizedBox(height: 16),
+          
+          _buildEditItem('Edit Nama', Icons.person_outline, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Nama segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Edit Email', Icons.email_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Email segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Edit Nomor Telepon', Icons.phone_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Telepon segera hadir!')),
+            );
+          }),
+          
+          const SizedBox(height: 24),
+          _buildSectionTitle('Keamanan'),
+          const SizedBox(height: 16),
+          
+          _buildEditItem('Ganti Password', Icons.lock_outline, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Ganti Password segera hadir!')),
+            );
+          }),
+          
+          const SizedBox(height: 24),
+          _buildSectionTitle('Preferensi'),
+          const SizedBox(height: 16),
+          
+          _buildEditItem('Notifikasi', Icons.notifications_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Notifikasi segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Bahasa', Icons.language_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Bahasa segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Tema', Icons.palette_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Tema segera hadir!')),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+      ),
+    );
+  }
+  
+  Widget _buildInfoItem(String label, String value) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.textLight.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTaskCard(
+    String courseName,
+    String taskName,
+    String deadline,
+    IconData icon,
+    bool isCompleted,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isCompleted 
+              ? AppColors.success.withOpacity(0.3) 
+              : AppColors.primary.withOpacity(0.3),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -287,12 +449,18 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: isCompleted 
+                  ? AppColors.success.withOpacity(0.1) 
+                  : AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 24),
+            child: Icon(
+              icon,
+              color: isCompleted ? AppColors.success : AppColors.primary,
+              size: 24,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -300,77 +468,57 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  label,
+                  courseName,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  value,
+                  taskName,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  deadline,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isCompleted ? AppColors.success : AppColors.warning,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
           ),
+          if (isCompleted)
+            const Icon(
+              Icons.check_circle,
+              color: AppColors.success,
+              size: 24,
+            ),
         ],
       ),
     );
   }
-
-  Widget _buildStatBox(String value, String label, IconData icon) {
+  
+  Widget _buildEditItem(String title, IconData icon, VoidCallback onTap) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.white, size: 32),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingItem(BuildContext context, String title, IconData icon, VoidCallback onTap) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.textLight.withOpacity(0.2),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 4,
             offset: const Offset(0, 1),
           ),
@@ -386,15 +534,23 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.primary),
+                Icon(icon, color: AppColors.primary, size: 24),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: AppColors.textLight),
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textLight,
+                  size: 24,
+                ),
               ],
             ),
           ),
@@ -418,16 +574,21 @@ class ProfileScreen extends StatelessWidget {
             child: const Text('Batal'),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
-              );
+            onPressed: () async {
+              final userService = UserService();
+              await userService.logout();
+              
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (route) => false,
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
-            child: const Text('Logout'),
+            child: const Text('Logout', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
