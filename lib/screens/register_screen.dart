@@ -69,14 +69,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
-      // Create user model from form data
-      final newUser = UserModel(
+      // Create user model from form data WITH PASSWORD
+      final newUser = UserModel.withPassword(
         nim: _nimController.text,
         nama: _namaController.text,
         email: _emailController.text,
         phone: _phoneController.text,
         prodi: _selectedProdi!,
         angkatan: _selectedAngkatan!,
+        password: _passwordController.text, // Save the password
         role: 'MAHASISWA',
       );
       
@@ -86,6 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       
       // Simulate network delay
       await Future.delayed(const Duration(seconds: 1));
+      
       
       if (mounted) {
         setState(() => _isLoading = false);

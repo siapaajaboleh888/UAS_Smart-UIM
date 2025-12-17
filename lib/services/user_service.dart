@@ -31,18 +31,21 @@ class UserService {
   Future<void> _initializeDefaultUsers() async {
     // Add default user if no users exist
     if (_registeredUsers.isEmpty) {
-      final defaultUser = UserModel(
+      final defaultUser = UserModel.withPassword(
         nim: '2022020100078',
         nama: 'MOH. SYAIFUL ANAM',
         email: 'syaifulanam@uim.ac.id',
         phone: '082334455667',
         prodi: 'Teknik Informatika',
         angkatan: '2022',
+        password: 'anam1234', // Default password
         role: 'MAHASISWA',
       );
       _registeredUsers.add(defaultUser);
       await _saveData();
       print('✅ Initialized default user: ${defaultUser.nama}');
+      print('   Email: ${defaultUser.email}');
+      print('   Password: anam1234');
     }
   }
 
@@ -164,11 +167,22 @@ class UserService {
         );
       } catch (e) {
         print('❌ User not found in registered users');
+        print('💡 Available users:');
+        for (var u in _registeredUsers) {
+          print('   - ${u.email} | ${u.nim}');
+        }
         // User not found - return null (login failed)
         return null;
       }
 
-      // User found - set as current user
+      // User found - now verify password
+      print('🔐 Verifying password...');
+      if (!user.verifyPassword(password)) {
+        print('❌ Invalid password');
+        return null;
+      }
+
+      // Password correct - set as current user
       _currentUser = user;
       await _saveData();
       
