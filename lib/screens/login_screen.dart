@@ -17,6 +17,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  List<String> _registeredEmails = [];
+  bool _showEmailSuggestions = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRegisteredUsers();
+  }
+
+  Future<void> _loadRegisteredUsers() async {
+    final userService = UserService();
+    final users = userService.registeredUsers;
+    setState(() {
+      _registeredEmails = users.map((u) => u.email).toList();
+    });
+  }
+
+  void _selectEmail(String email) {
+    setState(() {
+      _emailController.text = email;
+      _showEmailSuggestions = false;
+    });
+    // Auto-focus to password field
+    FocusScope.of(context).nextFocus();
+  }
 
   @override
   void dispose() {
@@ -198,11 +223,108 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Silakan login menggunakan akun Office 365',
+                        'Silakan login menggunakan akun UIM Anda',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       
                       const SizedBox(height: 32),
+                      
+                      // Quick Select Registered Emails (jika ada)
+                      if (_registeredEmails.isNotEmpty) ...[
+                        Text(
+                          'Akun Terdaftar:',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 60,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _registeredEmails.length,
+                            itemBuilder: (context, index) {
+                              final email = _registeredEmails[index];
+                              final isSelected = _emailController.text == email;
+                              
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: InkWell(
+                                  onTap: () => _selectEmail(email),
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.primary.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? AppColors.primary
+                                            : AppColors.primary.withOpacity(0.3),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          email.split('@')[0],
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white
+                                                : AppColors.primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          '@${email.split('@')[1]}',
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white.withOpacity(0.8)
+                                                : AppColors.textSecondary,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        
+                        // Divider
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(color: AppColors.textLight.withOpacity(0.3)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                'atau masukkan manual',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(color: AppColors.textLight.withOpacity(0.3)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
                       
                       // Email Field
                       TextFormField(
