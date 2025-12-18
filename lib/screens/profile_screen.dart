@@ -171,7 +171,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     required String userPhone,
   }) {
     final now = DateTime.now();
-    final loginTime = DateFormat('EEEE, dd MMM yyyy, h:mm a', 'id_ID').format(now);
+    // Simple date format without locale
+    final loginTime = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(now);
+    final firstAccess = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(
+      DateTime.now().subtract(const Duration(days: 3)),
+    );
+    
     
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -206,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           // Aktivitas Login
           _buildSectionTitle('Aktivitas Login'),
           const SizedBox(height: 12),
-          _buildInfoItem('First access to site', 'Minggu, 15 Des 2024, 8:45 AM'),
+          _buildInfoItem('First access to site', firstAccess),
           _buildInfoItem('Last access to site', loginTime),
           
           const SizedBox(height: 32),
