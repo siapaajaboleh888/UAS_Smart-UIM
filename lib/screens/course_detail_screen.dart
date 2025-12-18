@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../models/course.dart';
 import '../models/course_content.dart';
+import '../models/quiz.dart';
 import 'meeting_detail_screen.dart';
+import 'quiz_info_screen.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   final Course course;
@@ -272,7 +274,16 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            // Task Detail Navigation if needed
+            if (item.info.toLowerCase().contains('kuis')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizInfoScreen(
+                    quiz: Quiz.getSampleQuizzes().first,
+                  ),
+                ),
+              );
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(16),
