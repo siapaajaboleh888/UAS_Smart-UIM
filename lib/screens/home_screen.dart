@@ -1,227 +1,275 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../constants/app_colors.dart';
-import '../models/course.dart';
-import '../models/assignment.dart';
-import '../models/announcement.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
-import 'package:intl/intl.dart';
-import 'profile_screen.dart';
+import 'login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+  
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     // Get current user from UserService
     final userService = UserService();
     final UserModel? currentUser = userService.currentUser;
-    
-    // Extract user details
-    final String userName = currentUser?.nama.toUpperCase() ?? 'USER';
-    final String userInitials = currentUser?.getInitials() ?? 'U';
-    final String userRole = currentUser?.role ?? 'GUEST';
-    
-    final courses = Course.getSampleCourses();
-    final assignments = Assignment.getSampleAssignments();
-    final announcements = Announcement.getSampleAnnouncements();
 
+    // User data
+    final String userName = currentUser?.nama.toUpperCase() ?? 'GUEST USER';
+    final String userInitials = currentUser?.getInitials() ?? 'GU';
+    final String userEmail = currentUser?.email ?? '-';
+    final String userNim = currentUser?.nim ?? '-';
+    final String userProdi = currentUser?.prodi ?? '-';
+    final String userAngkatan = currentUser?.angkatan ?? '-';
+    final String userPhone = currentUser?.phone ?? '-';
+    
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // App Bar
-          SliverAppBar(
-            expandedHeight: 200,
-            floating: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
+      body: Column(
+        children: [
+          // Header with profile photo
+          Container(
+            decoration: const BoxDecoration(
+              gradient: AppColors.primaryGradient,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  // Top bar with settings
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
                       children: [
-                          Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                // Navigate to Profile screen
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ProfileScreen(),
-                                  ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.white,
-                                child: Text(
-                                  userInitials,
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Hallo,',
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      color: Colors.white.withOpacity(0.9),
-                                    ),
-                                  ),
-                                  Text(
-                                    userName,
-                                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    userRole,
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Colors.white.withOpacity(0.8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.settings_outlined, color: Colors.white),
-                              tooltip: 'Pengaturan',
-                              onPressed: () {
-                                // Navigate to Profile/Settings
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ProfileScreen(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                        Text(
+                          'Hallo,',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                          onPressed: () {
+                            // Settings action
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
+                  
+                  // Profile photo
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child: Text(
+                      userInitials,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // User name
+                  Text(
+                    userName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  
+                  Text(
+                    'MAHASISWA',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // Tab bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      labelColor: AppColors.primary,
+                      unselectedLabelColor: Colors.white,
+                      labelStyle: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      tabs: const [
+                        Tab(text: 'About Me'),
+                        Tab(text: 'Tasks'),
+                        Tab(text: 'Edit Profile'),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
           ),
-
-          // Content
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          
+          // Tab content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // About Me Tab
+                _buildAboutMeTab(
+                  userName: userName,
+                  userEmail: userEmail,
+                  userNim: userNim,
+                  userProdi: userProdi,
+                  userAngkatan: userAngkatan,
+                  userPhone: userPhone,
+                ),
+                
+                // Tasks Tab
+                _buildTasksTab(),
+                
+                // Edit Profile Tab
+                _buildEditProfileTab(context),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildAboutMeTab({
+    required String userName,
+    required String userEmail,
+    required String userNim,
+    required String userProdi,
+    required String userAngkatan,
+    required String userPhone,
+  }) {
+    final now = DateTime.now();
+    final loginTime = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(now);
+    final firstAccess = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(
+      DateTime.now().subtract(const Duration(days: 3)),
+    );
+    
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Stats Cards
+          Row(
+            children: [
+              Expanded(
+                child: _buildStatCard('7', 'Total Kelas', Icons.class_outlined),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildStatCard('0', 'Tugas Aktif', Icons.assignment_outlined),
+              ),
+            ],
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Informasi User
+          _buildSectionTitle('Informasi User'),
+          const SizedBox(height: 12),
+          _buildInfoItem('Email address', userEmail),
+          _buildInfoItem('Nomor Induk Mahasiswa', userNim),
+          
+          const SizedBox(height: 24),
+          
+          // Jadwal Kuliah
+          _buildSectionTitle('Jadwal Kuliah'),
+          const SizedBox(height: 12),
+          _buildInfoItem(
+            'Hari Terjadwal Kuliah', 
+            'Selasa, Rabu, Kamis (9:30 AM s/d 11:00 PM [3 Hari])',
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Website
+          _buildSectionTitle('Website'),
+          const SizedBox(height: 12),
+          _buildInfoItem('URL', 'uim.ac.id'),
+          
+          const SizedBox(height: 24),
+          
+          // Aktivitas Login
+          _buildSectionTitle('Aktivitas Login'),
+          const SizedBox(height: 12),
+          _buildInfoItem('First access to site', firstAccess),
+          _buildInfoItem('Last access to site', loginTime),
+          
+          const SizedBox(height: 32),
+          
+          // Logout Button
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => _showLogoutDialog(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Stats Cards
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatCard(
-                          context,
-                          'Total Kelas',
-                          '${courses.length}',
-                          Icons.class_outlined,
-                          AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildStatCard(
-                          context,
-                          'Tugas Aktif',
-                          '${assignments.where((a) => !a.isSubmitted).length}',
-                          Icons.assignment_outlined,
-                          AppColors.accent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Upcoming Assignments
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Tugas Yang Akan Datang',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Lihat Semua'),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  if (assignments.where((a) => !a.isSubmitted).isEmpty)
-                    _buildEmptyState(context, 'Tidak Ada Tugas Dan Kuis Hari Ini', Icons.task_alt)
-                  else
-                    ...assignments.where((a) => !a.isSubmitted).map(
-                      (assignment) => _buildAssignmentCard(context, assignment),
+                  Icon(Icons.logout, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    'Log Out',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Latest Announcements
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Pengumuman Terakhir',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Lihat Semua'),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  ...announcements.take(3).map(
-                    (announcement) => _buildAnnouncementCard(context, announcement),
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // My Classes Progress
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Progres Kelas',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Lihat Semua'),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  ...courses.take(3).map(
-                    (course) => _buildCourseProgressCard(context, course),
                   ),
                 ],
               ),
@@ -231,30 +279,130 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildStatCard(BuildContext context, String label, String value, IconData icon, Color color) {
+  
+  Widget _buildTasksTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Tugas Aktif'),
+          const SizedBox(height: 16),
+          
+          _buildTaskCard(
+            'Pemrograman Mobile',
+            'UAS - Membuat Aplikasi LMS',
+            'Deadline: 20 Des 2024',
+            Icons.code,
+            false,
+          ),
+          
+          _buildTaskCard(
+            'Basis Data',
+            'Tugas 3 - Normalisasi Database',
+            'Deadline: 18 Des 2024',
+            Icons.storage,
+            false,
+          ),
+          
+          _buildTaskCard(
+            'Jaringan Komputer',
+            'Praktek - Konfigurasi Router',
+            'Deadline: 22 Des 2024',
+            Icons.router,
+            false,
+          ),
+          
+          const SizedBox(height: 24),
+          _buildSectionTitle('Tugas Selesai'),
+          const SizedBox(height: 16),
+          
+          _buildTaskCard(
+            'Pemrograman Web',
+            'Tugas 2 - Laravel CRUD',
+            'Selesai: 15 Des 2024',
+            Icons.web,
+            true,
+          ),
+          
+          _buildTaskCard(
+            'Algoritma',
+            'Quiz 1 - Sorting Algorithm',
+            'Selesai: 10 Des 2024',
+            Icons.quiz,
+            true,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildEditProfileTab(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Edit Informasi'),
+          const SizedBox(height: 16),
+          
+          _buildEditItem('Edit Nama', Icons.person_outline, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Nama segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Edit Email', Icons.email_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Email segera hadir!')),
+            );
+          }),
+          
+          _buildEditItem('Edit Nomor Telepon', Icons.phone_outlined, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Edit Telepon segera hadir!')),
+            );
+          }),
+          
+          const SizedBox(height: 24),
+          _buildSectionTitle('Keamanan'),
+          const SizedBox(height: 16),
+          
+          _buildEditItem('Ganti Password', Icons.lock_outline, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Fitur Ganti Password segera hadir!')),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildStatCard(String value, String label, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: AppColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 32),
+          Icon(icon, color: AppColors.primary, size: 32),
           const SizedBox(height: 12),
           Text(
             value,
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: color,
+            style: const TextStyle(
+              fontSize: 32,
               fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             ),
           ),
           Text(
             label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: const TextStyle(
+              fontSize: 14,
               color: AppColors.textSecondary,
             ),
           ),
@@ -262,17 +410,83 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildAssignmentCard(BuildContext context, Assignment assignment) {
+  
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+      ),
+    );
+  }
+  
+  Widget _buildInfoItem(String label, String value) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.textLight.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTaskCard(
+    String courseName,
+    String taskName,
+    String deadline,
+    IconData icon,
+    bool isCompleted,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isCompleted 
+              ? AppColors.success.withOpacity(0.3) 
+              : AppColors.primary.withOpacity(0.3),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -283,202 +497,146 @@ class HomeScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: assignment.isDueSoon 
-                  ? AppColors.warning.withOpacity(0.1)
+              color: isCompleted 
+                  ? AppColors.success.withOpacity(0.1) 
                   : AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
-              Icons.assignment,
-              color: assignment.isDueSoon ? AppColors.warning : AppColors.primary,
+              icon,
+              color: isCompleted ? AppColors.success : AppColors.primary,
+              size: 24,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  assignment.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  courseName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.calendar_today, size: 14, color: AppColors.textLight),
-                    const SizedBox(width: 4),
-                    Text(
-                      DateFormat('EEEE, dd MMMM yyyy, HH:mm').format(assignment.deadline) + ' WIB',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                Text(
+                  taskName,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  deadline,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isCompleted ? AppColors.success : AppColors.warning,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
           ),
+          if (isCompleted)
+            const Icon(
+              Icons.check_circle,
+              color: AppColors.success,
+              size: 24,
+            ),
         ],
       ),
     );
   }
-
-  Widget _buildAnnouncementCard(BuildContext context, Announcement announcement) {
+  
+  Widget _buildEditItem(String title, IconData icon, VoidCallback onTap) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.textLight.withOpacity(0.2),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.primary.withOpacity(0.1),
-                child: const Icon(Icons.campaign, color: AppColors.primary, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      announcement.author,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      announcement.timeAgo,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            announcement.title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            announcement.content,
-            style: Theme.of(context).textTheme.bodyMedium,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCourseProgressCard(BuildContext context, Course course) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: AppColors.cardGradient,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.primary, size: 24),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      course.code,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${course.progress}%',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: course.progress / 100,
-              backgroundColor: AppColors.textLight.withOpacity(0.2),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-              minHeight: 8,
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textLight,
+                  size: 24,
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, String message, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: Column(
-          children: [
-            Icon(icon, size: 60, color: AppColors.textLight),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
+        title: const Text('Konfirmasi Logout'),
+        content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final userService = UserService();
+              await userService.logout();
+              
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (route) => false,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+            ),
+            child: const Text('Logout', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
