@@ -236,6 +236,44 @@ class UserService {
   // Get total registered users count
   int get totalUsers => _registeredUsers.length;
   
+  // Update user photo
+  Future<bool> updateUserPhoto(String photoPath) async {
+    try {
+      if (_currentUser == null) return false;
+      
+      // Create a new user instance with updated photo
+      final updatedUser = UserModel(
+        nim: _currentUser!.nim,
+        nama: _currentUser!.nama,
+        email: _currentUser!.email,
+        phone: _currentUser!.phone,
+        prodi: _currentUser!.prodi,
+        angkatan: _currentUser!.angkatan,
+        role: _currentUser!.role,
+        passwordHash: _currentUser!.passwordHash,
+        photoPath: photoPath,
+      );
+      
+      // Update current user
+      _currentUser = updatedUser;
+      
+      // Update in registered users list
+      final index = _registeredUsers.indexWhere((u) => u.nim == _currentUser!.nim);
+      if (index != -1) {
+        _registeredUsers[index] = updatedUser;
+      }
+      
+      // Save changes
+      await _saveData();
+      print('✅ Updated user photo: $photoPath');
+      
+      return true;
+    } catch (e) {
+      print('❌ Error updating user photo: $e');
+      return false;
+    }
+  }
+  
   // Debug: Print all users
   void printAllUsers() {
     print('📋 All registered users (${_registeredUsers.length}):');

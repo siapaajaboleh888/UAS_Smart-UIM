@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
@@ -14,6 +17,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String? _selectedImagePath;
+  final ImagePicker _picker = ImagePicker();
   
   @override
   void initState() {
@@ -72,18 +77,63 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     ),
                   ),
                   
-                  // Profile photo
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    child: Text(
-                      userInitials,
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                  // Profile photo with edit button
+                  Stack(
+                    children: [
+                      // Profile photo
+                      GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 4,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: _buildProfileImage(
+                              currentUser?.photoPath ?? _selectedImagePath,
+                              userInitials,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      // Edit button
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.primary,
+                                width: 2,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   
                   const SizedBox(height: 16),
@@ -188,6 +238,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           const SizedBox(height: 12),
           _buildInfoItem('Email address', userEmail),
           _buildInfoItem('Nomor Induk Mahasiswa', userNim),
+          _buildInfoItem('Program Studi', userProdi),
+          _buildInfoItem('Angkatan', userAngkatan),
+          _buildInfoItem('Nomor Telepon', userPhone),
           
           const SizedBox(height: 24),
           
@@ -558,6 +611,94 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Pick image from gallery
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+      
+      if (image != null) {
+        final userService = UserService();
+        final success = await userService.updateUserPhoto(image.path);
+        
+        if (success && mounted) {
+          setState(() {
+            _selectedImagePath = image.path;
+          });
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Foto profil berhasil diperbarui!'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Gagal memilih foto'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+  
+  // Build profile image widget
+  Widget _buildProfileImage(String? imagePath, String initials) {
+    if (imagePath != null && imagePath.isNotEmpty) {
+      // For web, use network image
+      if (kIsWeb) {
+        return Image.network(
+          imagePath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildInitialsAvatar(initials);
+          },
+        );
+      } else {
+        // For mobile, use file image
+        final file = File(imagePath);
+        if (file.existsSync()) {
+          return Image.file(
+            file,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return _buildInitialsAvatar(initials);
+            },
+          );
+        }
+      }
+    }
+    
+    // Default to initials
+    return _buildInitialsAvatar(initials);
+  }
+  
+  // Build initials avatar
+  Widget _buildInitialsAvatar(String initials) {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Text(
+          initials,
+          style: const TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
           ),
         ),
       ),

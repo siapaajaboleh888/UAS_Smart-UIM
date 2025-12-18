@@ -10,6 +10,7 @@ class UserModel {
   final String angkatan;
   final String role;
   final String passwordHash; // Store hashed password
+  final String? photoPath; // Path to profile photo
 
   UserModel({
     required this.nim,
@@ -20,6 +21,7 @@ class UserModel {
     required this.angkatan,
     this.role = 'MAHASISWA',
     this.passwordHash = '',
+    this.photoPath,
   });
 
   // Hash password using SHA-256
@@ -39,6 +41,7 @@ class UserModel {
     required String angkatan,
     required String password,
     String role = 'MAHASISWA',
+    String? photoPath,
   }) {
     return UserModel(
       nim: nim,
@@ -49,6 +52,7 @@ class UserModel {
       angkatan: angkatan,
       role: role,
       passwordHash: hashPassword(password),
+      photoPath: photoPath,
     );
   }
 
@@ -77,6 +81,7 @@ class UserModel {
       'angkatan': angkatan,
       'role': role,
       'passwordHash': passwordHash,
+      'photoPath': photoPath,
     };
   }
 
@@ -91,6 +96,7 @@ class UserModel {
       angkatan: map['angkatan'] ?? '',
       role: map['role'] ?? 'MAHASISWA',
       passwordHash: map['passwordHash'] ?? '',
+      photoPath: map['photoPath'],
     );
   }
 }
