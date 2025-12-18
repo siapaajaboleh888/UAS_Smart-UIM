@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class MeetingSubItem {
   final String title;
   final bool isCompleted;
