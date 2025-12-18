@@ -151,6 +151,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
   }
 
   Widget _buildContentCard(CourseContent item) {
+    if (item.type == ContentType.task) {
+      return _buildTaskCard(item);
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -237,5 +241,121 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
       ),
     );
   }
+
+  Widget _buildTaskCard(CourseContent item) {
+    // Determine color based on badge text (info)
+    Color badgeColor = Colors.blue.shade400;
+    if (item.info.toLowerCase().contains('kuis')) {
+      badgeColor = Colors.blue.shade400;
+    } else if (item.info.toLowerCase().contains('tugas')) {
+      badgeColor = Colors.cyan.shade400;
+    } else if (item.info.toLowerCase().contains('pertemuan')) {
+      badgeColor = Colors.blue.shade600;
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            // Task Detail Navigation if needed
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Type Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: badgeColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    item.info.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Icon placeholder mimicking the image
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: item.info.toLowerCase().contains('kuis') 
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.quiz_outlined, size: 18, color: AppColors.textPrimary),
+                                Text('Quiz', style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold, color: Colors.grey.shade700)),
+                              ],
+                            )
+                          : const Icon(Icons.assignment_outlined, size: 24, color: AppColors.textPrimary),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (item.deadline.isNotEmpty)
+                            Text(
+                              'Tanggal Waktu : ${item.deadline}',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (item.isCompleted)
+                      const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
+
 

@@ -20,7 +20,9 @@ class CourseContent {
   final bool isCompleted;
   final ContentType type;
   final int week;
+  final String deadline;
   final List<MeetingSubItem> subItems;
+  final List<CourseContent> relatedTasks;
 
   CourseContent({
     required this.id,
@@ -30,7 +32,9 @@ class CourseContent {
     this.isCompleted = false,
     required this.type,
     required this.week,
+    this.deadline = '',
     this.subItems = const [],
+    this.relatedTasks = const [],
   });
 }
 
@@ -63,12 +67,17 @@ class CourseDetailData {
               MeetingSubItem(title: 'Dasar-dasar Flutter', icon: Icons.code, isCompleted: true),
               MeetingSubItem(title: 'Instalasi Lingkungan Kerja', icon: Icons.settings, isCompleted: true),
             ],
+            relatedTasks: [
+              CourseContent(id: 't1_m1', title: 'Quiz Review 01', info: 'KUIS', deadline: '25 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+            ],
           ),
           CourseContent(id: 'm2', title: 'Instalasi Flutter & Dart SDK', info: '1 Video, 2 Panduan Instalasi', isCompleted: true, type: ContentType.material, week: 2),
           CourseContent(id: 'm3', title: 'Stateless vs Stateful Widget', info: '1 Video, 3 Latihan Code', isCompleted: true, type: ContentType.material, week: 3),
         ],
         tasks: [
-          CourseContent(id: 't1', title: 'Kuis 1: Dasar Dart', info: '10 Soal Pilgan', isCompleted: true, type: ContentType.task, week: 2),
+          CourseContent(id: 't1', title: 'Quiz Review 01', info: 'KUIS', deadline: '25 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+          CourseContent(id: 't2', title: 'Tugas 01 - Instalasi SDK', info: 'TUGAS', deadline: '28 Desember 2025 23:59 WIB', isCompleted: false, type: ContentType.task, week: 2),
+          CourseContent(id: 't3', title: 'Kuis - Assessment 2', info: 'Pertemuan 3', deadline: '30 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 3),
         ],
       ),
       '2': CourseDetailData(
@@ -90,6 +99,9 @@ class CourseDetailData {
               MeetingSubItem(title: '10 Prinsip Desain', icon: Icons.lightbulb, isCompleted: true),
               MeetingSubItem(title: 'Best Practice UI Design', icon: Icons.check_circle_outline, isCompleted: true),
             ],
+            relatedTasks: [
+              CourseContent(id: 't1_m1', title: 'Quiz Dasar UI', info: 'KUIS', deadline: '15 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+            ],
           ),
           CourseContent(
             id: 'm2',
@@ -106,7 +118,9 @@ class CourseDetailData {
           ),
         ],
         tasks: [
-          CourseContent(id: 't1', title: 'Kuis: Prinsip Desain', info: '5 Soal Esai', isCompleted: true, type: ContentType.task, week: 2),
+          CourseContent(id: 't1', title: 'Quiz Review 01', info: 'KUIS', deadline: '25 Februari 2021 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+          CourseContent(id: 't2', title: 'Tugas 01 - UID Android Mobile Game', info: 'TUGAS', deadline: '28 Februari 2021 23:59 WIB', isCompleted: false, type: ContentType.task, week: 2),
+          CourseContent(id: 't3', title: 'Kuis - Assessment 2', info: 'Pertemuan 3', deadline: '25 Februari 2021 23:59 WIB', isCompleted: true, type: ContentType.task, week: 3),
         ],
       ),
       '3': CourseDetailData(
@@ -125,7 +139,9 @@ class CourseDetailData {
             ],
           ),
         ],
-        tasks: [],
+        tasks: [
+          CourseContent(id: 't1', title: 'Quiz Basis Data 1', info: 'KUIS', deadline: '20 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+        ],
       ),
       '4': CourseDetailData(
         materials: [
@@ -143,7 +159,9 @@ class CourseDetailData {
             ],
           ),
         ],
-        tasks: [],
+        tasks: [
+          CourseContent(id: 't1', title: 'Latihan Topologi', info: 'TUGAS', deadline: '22 Desember 2025 23:59 WIB', isCompleted: false, type: ContentType.task, week: 1),
+        ],
       ),
       '5': CourseDetailData(
         materials: [
@@ -161,7 +179,9 @@ class CourseDetailData {
             ],
           ),
         ],
-        tasks: [],
+        tasks: [
+          CourseContent(id: 't1', title: 'Kuis Logika Dasar', info: 'KUIS', deadline: '24 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+        ],
       ),
       '6': CourseDetailData(
         materials: [
@@ -179,7 +199,9 @@ class CourseDetailData {
             ],
           ),
         ],
-        tasks: [],
+        tasks: [
+          CourseContent(id: 't1', title: 'Tugas Analisis SDLC', info: 'TUGAS', deadline: '26 Desember 2025 23:59 WIB', isCompleted: false, type: ContentType.task, week: 1),
+        ],
       ),
       '7': CourseDetailData(
         materials: [
@@ -197,10 +219,13 @@ class CourseDetailData {
             ],
           ),
         ],
-        tasks: [],
+        tasks: [
+          CourseContent(id: 't1', title: 'Kuis AI Modern', info: 'KUIS', deadline: '28 Desember 2025 23:59 WIB', isCompleted: true, type: ContentType.task, week: 1),
+        ],
       ),
     };
   }
+
 
 }
 
