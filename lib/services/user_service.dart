@@ -19,12 +19,20 @@ class UserService {
   UserModel? get currentUser => _currentUser;
   List<UserModel> get registeredUsers => List.unmodifiable(_registeredUsers);
 
-  // Initialize and load data
-  Future<void> _initialize() async {
+  // Public initialize method - MUST be called on app start
+  Future<void> initialize() async {
     if (_isInitialized) return;
+    print('🚀 Initializing UserService...');
     await _loadData();
     await _initializeDefaultUsers();
     _isInitialized = true;
+    print('✅ UserService initialized with ${_registeredUsers.length} users');
+  }
+
+  // Initialize and load data (private)
+  Future<void> _initialize() async {
+    if (_isInitialized) return;
+    await initialize();  // Call public method
   }
 
   // Initialize default users if needed
