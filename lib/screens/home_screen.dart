@@ -68,12 +68,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final userService = UserService();
     final UserModel? currentUser = userService.currentUser;
 
-    // AUTO-CLEAN: If there's an old temporary blob URL saved, clear it
-    if (kIsWeb && currentUser?.photoPath != null && currentUser!.photoPath!.startsWith('blob:')) {
-      debugPrint('🧹 Cleaning up old temporary blob URL...');
-      userService.updateUserPhoto(''); // Reset invalid path
-    }
-
     // User data
     final String userName = currentUser?.nama.toUpperCase() ?? 'GUEST USER';
     final String userInitials = currentUser?.getInitials() ?? 'GU';
@@ -83,7 +77,29 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final String userAngkatan = currentUser?.angkatan ?? '-';
     final String userPhone = currentUser?.phone ?? '-';
     final String? userPhoto = currentUser?.photoPath;
-    
+
+    // Profile photo logic
+    ImageProvider? profileImage;
+    if (userPhoto != null && userPhoto.isNotEmpty) {
+      if (userPhoto.startsWith('data:')) {
+        try {
+          profileImage = MemoryImage(base64Decode(userPhoto.split(',')[1]));
+        } catch (e) {
+          debugPrint('❌ Error decoding Base64 image: $e');
+        }
+      } else if (kIsWeb) {
+        // Only use NetworkImage if it's not a temporary blob
+        if (!userPhoto.startsWith('blob:')) {
+          profileImage = NetworkImage(userPhoto);
+        }
+      } else {
+        final file = File(userPhoto);
+        if (file.existsSync()) {
+          profileImage = FileImage(file);
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
@@ -135,12 +151,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 child: CircleAvatar(
                                   radius: 50,
                                   backgroundColor: AppColors.primary.withOpacity(0.1),
-                                  backgroundImage: userPhoto != null && userPhoto.isNotEmpty
-                                      ? (userPhoto.startsWith('data:') 
-                                          ? MemoryImage(base64Decode(userPhoto.split(',')[1]))
-                                          : (kIsWeb ? NetworkImage(userPhoto) : FileImage(File(userPhoto)))) as ImageProvider
-                                      : null,
-                                  child: userPhoto == null || userPhoto.isEmpty
+                                  backgroundImage: profileImage,
+                                  child: profileImage == null
                                       ? Text(
                                           userInitials,
                                           style: const TextStyle(

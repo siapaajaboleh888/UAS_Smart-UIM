@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:convert';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
@@ -629,11 +630,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       
       if (image != null) {
         final userService = UserService();
-        final success = await userService.updateUserPhoto(image.path);
+        
+        String photoToSave = image.path;
+        
+        // Handle Web Base64 conversion
+        if (kIsWeb) {
+          final bytes = await image.readAsBytes();
+          photoToSave = 'data:image/png;base64,${base64Encode(bytes)}';
+        }
+        
+        final success = await userService.updateUserPhoto(photoToSave);
         
         if (success && mounted) {
           setState(() {
-            _selectedImagePath = image.path;
+            _selectedImagePath = photoToSave;
           });
           
           ScaffoldMessenger.of(context).showSnackBar(
@@ -660,7 +670,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   // Build profile image widget
   Widget _buildProfileImage(String? imagePath, String initials) {
     if (imagePath != null && imagePath.isNotEmpty) {
-      // For web, use network image
+      // Check if it's base64
+      if (imagePath.startsWith('data:')) {
+        try {
+          return Image.memory(
+            base64Decode(imagePath.split(',')[1]),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => _buildInitialsAvatar(initials),
+          );
+        } catch (e) {
+          return _buildInitialsAvatar(initials);
+        }
+      }
+      
+      // For legacy blob or network
       if (kIsWeb) {
         return Image.network(
           imagePath,
