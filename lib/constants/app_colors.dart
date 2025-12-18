@@ -40,6 +40,15 @@ class AppColors {
     end: Alignment.bottomRight,
   );
   
+  static const Color uimRed = Color(0xFFC0392B); // Red color from reference
+  static const Color uimRedDark = Color(0xFF8E2B20);
+  
+  static const LinearGradient redGradient = LinearGradient(
+    colors: [Color(0xFFC0392B), Color(0xFFE74C3C)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
   // Shadow Colors
   static const Color shadow = Color(0x1A000000);
   static const Color shadowLight = Color(0x0D000000);

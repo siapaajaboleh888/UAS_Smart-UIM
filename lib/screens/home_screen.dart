@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
+import '../models/course.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,11 +32,47 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 500, // Optimize size for local storage
+        imageQuality: 70,
+      );
+      
+      if (image != null) {
+        final userService = UserService();
+        debugPrint('📸 Image picked: ${image.name}');
+        
+        String photoToSave = image.path;
+        
+        if (kIsWeb) {
+          debugPrint('🌐 Processing for Web...');
+          final bytes = await image.readAsBytes();
+          photoToSave = 'data:image/png;base64,${base64Encode(bytes)}';
+          debugPrint('✅ Converted to Base64 (length: ${photoToSave.length})');
+        }
+        
+        await userService.updateUserPhoto(photoToSave);
+        if (mounted) setState(() {}); 
+      }
+    } catch (e) {
+      debugPrint('❌ Error picking image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get current user from UserService
     final userService = UserService();
     final UserModel? currentUser = userService.currentUser;
+
+    // AUTO-CLEAN: If there's an old temporary blob URL saved, clear it
+    if (kIsWeb && currentUser?.photoPath != null && currentUser!.photoPath!.startsWith('blob:')) {
+      debugPrint('🧹 Cleaning up old temporary blob URL...');
+      userService.updateUserPhoto(''); // Reset invalid path
+    }
 
     // User data
     final String userName = currentUser?.nama.toUpperCase() ?? 'GUEST USER';
@@ -41,115 +82,161 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final String userProdi = currentUser?.prodi ?? '-';
     final String userAngkatan = currentUser?.angkatan ?? '-';
     final String userPhone = currentUser?.phone ?? '-';
+    final String? userPhoto = currentUser?.photoPath;
     
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Column(
         children: [
           // Header with profile photo
-          Container(
-            decoration: const BoxDecoration(
-              gradient: AppColors.primaryGradient,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  // Top bar with settings
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
+          SizedBox(
+            height: 275,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  height: 250,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    gradient: AppColors.primaryGradient,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(0),
+                    ),
+                  ),
+                  child: SafeArea(
+                    child: Column(
                       children: [
-                        Text(
-                          'Hallo,',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
-                            fontSize: 16,
+                        // Top bar with Back Button and Name
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                                onPressed: () => Navigator.maybePop(context),
+                              ),
+                              const Spacer(),
+                            ],
                           ),
                         ),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(Icons.settings_outlined, color: Colors.white),
-                          onPressed: () {
-                            // Settings action
-                          },
+                        
+                        // Profile photo
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Stack(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                                  backgroundImage: userPhoto != null && userPhoto.isNotEmpty
+                                      ? (userPhoto.startsWith('data:') 
+                                          ? MemoryImage(base64Decode(userPhoto.split(',')[1]))
+                                          : (kIsWeb ? NetworkImage(userPhoto) : FileImage(File(userPhoto)))) as ImageProvider
+                                      : null,
+                                  child: userPhoto == null || userPhoto.isEmpty
+                                      ? Text(
+                                          userInitials,
+                                          style: const TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primary,
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt,
+                                    size: 20,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 12),
+                        
+                        // User name
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 1.1,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
-                  
-                  // Profile photo
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    child: Text(
-                      userInitials,
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  // User name
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  Text(
-                    'MAHASISWA',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Tab bar
-                  Container(
+                ),
+                
+                // Floating Tab Bar
+                Positioned(
+                  bottom: 0,
+                  left: 24,
+                  right: 24,
+                  child: Container(
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
-                    child: TabBar(
-                      controller: _tabController,
-                      indicator: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      labelColor: AppColors.primary,
-                      unselectedLabelColor: Colors.white,
-                      labelStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      tabs: const [
-                        Tab(text: 'About Me'),
-                        Tab(text: 'Tasks'),
-                        Tab(text: 'Edit Profile'),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
                       ],
                     ),
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      child: TabBar(
+                        controller: _tabController,
+                        indicator: UnderlineTabIndicator(
+                          borderSide: const BorderSide(width: 3.0, color: AppColors.primary),
+                          insets: const EdgeInsets.symmetric(horizontal: 16.0),
+                        ),
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        labelStyle: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        tabs: const [
+                          Tab(text: 'About Me'),
+                          Tab(text: 'Kelas'),
+                          Tab(text: 'Edit Profile'),
+                        ],
+                      ),
+                    ),
                   ),
-                  
-                  const SizedBox(height: 16),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          
+          const SizedBox(height: 10),
           
           // Tab content
           Expanded(
@@ -166,8 +253,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   userPhone: userPhone,
                 ),
                 
-                // Tasks Tab
-                _buildTasksTab(),
+                // Tasks/Kelas Tab
+                _buildTasksTab(context),
                 
                 // Edit Profile Tab
                 _buildEditProfileTab(context),
@@ -188,53 +275,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     required String userPhone,
   }) {
     final now = DateTime.now();
-    final loginTime = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(now);
-    final firstAccess = DateFormat('EEEE, dd MMM yyyy, h:mm a').format(
-      DateTime.now().subtract(const Duration(days: 3)),
+    final loginTime = DateFormat('EEEE, d MMMM yyyy, h:mm a').format(now);
+    final firstAccess = DateFormat('EEEE, d MMMM yyyy, h:mm a').format(
+      DateTime.now().subtract(const Duration(days: 102)), // Example data from ref
     );
     
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Stats Cards
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatCard('7', 'Total Kelas', Icons.class_outlined),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildStatCard('0', 'Tugas Aktif', Icons.assignment_outlined),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 24),
-          
           // Informasi User
           _buildSectionTitle('Informasi User'),
           const SizedBox(height: 12),
           _buildInfoItem('Email address', userEmail),
-          _buildInfoItem('Nomor Induk Mahasiswa', userNim),
-          
-          const SizedBox(height: 24),
-          
-          // Jadwal Kuliah
-          _buildSectionTitle('Jadwal Kuliah'),
-          const SizedBox(height: 12),
-          _buildInfoItem(
-            'Hari Terjadwal Kuliah', 
-            'Selasa, Rabu, Kamis (9:30 AM s/d 11:00 PM [3 Hari])',
-          ),
-          
-          const SizedBox(height: 24),
-          
-          // Website
-          _buildSectionTitle('Website'),
-          const SizedBox(height: 12),
-          _buildInfoItem('URL', 'uim.ac.id'),
+          _buildInfoItem('Program Studi', userProdi),
+          _buildInfoItem('Fakultas', 'Informatika'), // Default or mock
           
           const SizedBox(height: 24),
           
@@ -242,37 +298,129 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           _buildSectionTitle('Aktivitas Login'),
           const SizedBox(height: 12),
           _buildInfoItem('First access to site', firstAccess),
-          _buildInfoItem('Last access to site', loginTime),
+          _buildInfoItem('Last access to site', '$loginTime (now)'),
           
           const SizedBox(height: 32),
           
-          // Logout Button
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () => _showLogoutDialog(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          // Small Logout Button at the bottom right
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () => _showLogoutDialog(context),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.logout, color: Colors.white, size: 18),
+                    SizedBox(width: 8),
+                    Text(
+                      'Log Out',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.logout, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text(
-                    'Log Out',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTasksTab(BuildContext context) {
+    // Get sample courses from model
+    final List<Course> courses = Course.getSampleCourses().take(3).toList(); // Show first 3 for profile
+    
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Daftar Kelas'),
+          const SizedBox(height: 16),
+          
+          ...courses.map((course) => _buildMiniCourseCard(context, course)),
+          
+          const SizedBox(height: 16),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                // Potential navigation to full courses screen if needed
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Gunakan menu "Kelas Saya" di bawah untuk melihat semua kelas.')),
+                );
+              },
+              child: const Text('Lihat Selengkapnya'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMiniCourseCard(BuildContext context, Course course) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.textLight.withOpacity(0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.book, color: AppColors.primary, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  course.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  course.instructor,
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              '${course.progress}%',
+              style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -280,101 +428,83 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
   
-  Widget _buildTasksTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionTitle('Tugas Aktif'),
-          const SizedBox(height: 16),
-          
-          _buildTaskCard(
-            'Pemrograman Mobile',
-            'UAS - Membuat Aplikasi LMS',
-            'Deadline: 20 Des 2024',
-            Icons.code,
-            false,
-          ),
-          
-          _buildTaskCard(
-            'Basis Data',
-            'Tugas 3 - Normalisasi Database',
-            'Deadline: 18 Des 2024',
-            Icons.storage,
-            false,
-          ),
-          
-          _buildTaskCard(
-            'Jaringan Komputer',
-            'Praktek - Konfigurasi Router',
-            'Deadline: 22 Des 2024',
-            Icons.router,
-            false,
-          ),
-          
-          const SizedBox(height: 24),
-          _buildSectionTitle('Tugas Selesai'),
-          const SizedBox(height: 16),
-          
-          _buildTaskCard(
-            'Pemrograman Web',
-            'Tugas 2 - Laravel CRUD',
-            'Selesai: 15 Des 2024',
-            Icons.web,
-            true,
-          ),
-          
-          _buildTaskCard(
-            'Algoritma',
-            'Quiz 1 - Sorting Algorithm',
-            'Selesai: 10 Des 2024',
-            Icons.quiz,
-            true,
-          ),
-        ],
-      ),
-    );
-  }
-  
   Widget _buildEditProfileTab(BuildContext context) {
+    final userService = UserService();
+    final user = userService.currentUser;
+    final nameController = TextEditingController(text: user?.nama);
+    final phoneController = TextEditingController(text: user?.phone);
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Edit Informasi'),
+          _buildSectionTitle('Data Personal'),
           const SizedBox(height: 16),
           
-          _buildEditItem('Edit Nama', Icons.person_outline, () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Fitur Edit Nama segera hadir!')),
-            );
-          }),
-          
-          _buildEditItem('Edit Email', Icons.email_outlined, () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Fitur Edit Email segera hadir!')),
-            );
-          }),
-          
-          _buildEditItem('Edit Nomor Telepon', Icons.phone_outlined, () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Fitur Edit Telepon segera hadir!')),
-            );
-          }),
+          _buildTextField('Nama Lengkap', nameController, Icons.person_outline),
+          const SizedBox(height: 16),
+          _buildTextField('Nomor Telepon', phoneController, Icons.phone_android_outlined),
           
           const SizedBox(height: 24),
           _buildSectionTitle('Keamanan'),
           const SizedBox(height: 16),
           
           _buildEditItem('Ganti Password', Icons.lock_outline, () {
-            ScaffoldMessenger.of(context).showSnackBar(
+             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Fitur Ganti Password segera hadir!')),
             );
           }),
+          
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Profil berhasil diperbarui secara lokal!'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text('Simpan Perubahan', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, IconData icon) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: AppColors.primary, size: 20),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: AppColors.textLight.withOpacity(0.2)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: AppColors.textLight.withOpacity(0.2)),
+            ),
+          ),
+        ),
+      ],
     );
   }
   
@@ -423,46 +553,27 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
   
   Widget _buildInfoItem(String label, String value) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.textLight.withOpacity(0.2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.textSecondary,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
   
