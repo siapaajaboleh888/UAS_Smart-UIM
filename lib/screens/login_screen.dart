@@ -528,23 +528,42 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Icon(Icons.info_outline, color: AppColors.info, size: 20),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Bantuan Login',
+                                  'Akses Mahasiswa & Dosen',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: AppColors.info,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Login menggunakan Akun Microsoft Office 365 UIM:',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
                             const SizedBox(height: 8),
                             Text(
-                              'Username: NIM/Username + @uim.ac.id\nPassword: Password Akun UIM Anda',
+                              '• Username: Akun iGracias / NIM ditambahkan "@uim.ac.id"\n• Password: Gunakan password SSO Anda.\n\nPastikan Anda telah mengubah password menjadi "Strong Password" di iGracias jika terjadi kegagalan autentikasi.',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: AppColors.textSecondary,
+                                height: 1.4,
                               ),
                             ),
                             const SizedBox(height: 12),
+                            const Divider(),
+                            const SizedBox(height: 8),
                             Text(
-                              'Hubungi IT Helpdesk UIM:\n📧 it.support@uim.ac.id\n📱 +62 821-XXXX-XXXX',
+                              'Layanan CeLOE Helpdesk UIM:',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              '📧 Mail: infoceloe@uim.ac.id\n📱 WhatsApp: +62 821-1666-3563',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: AppColors.textSecondary,
                               ),

@@ -37,82 +37,43 @@ class NotificationItem {
     final now = DateTime.now();
     
     return [
-      // Tugas baru
       NotificationItem(
         id: '1',
-        title: 'Tugas Baru: UAS Pemrograman Mobile',
-        message: 'Dosen telah memberikan tugas baru dengan deadline 20 Desember 2025. Jangan lupa selesaikan tepat waktu!',
-        type: 'assignment',
-        timestamp: now.subtract(const Duration(hours: 2)),
+        title: 'Maintenance Pra UAS Semester Genap 2024/2025',
+        message: 'Diinformasikan kepada seluruh pengguna LMS, kami dari tim CeLOE akan melakukan maintenance pada tanggal 12 Juni 2025, untuk meningkatkan layanan server.',
+        type: 'announcement',
+        timestamp: now.subtract(const Duration(hours: 3, minutes: 30)),
         isRead: false,
       ),
-      
-      // Pengumuman
       NotificationItem(
         id: '2',
-        title: 'Pengumuman: Perubahan Jadwal Kuliah',
-        message: 'Kuliah Basis Data hari Rabu dipindahkan ke hari Kamis jam 10:00. Harap catat perubahan ini.',
-        type: 'announcement',
-        timestamp: now.subtract(const Duration(hours: 5)),
+        title: 'Tugas Terkirim: Laporan Akhir Assessment 3',
+        message: 'Anda telah mengirimkan pengajuan tugas untuk Pengumpulan Laporan Akhir Assessment 3 (Tugas Besar) pada mata kuliah Desain Antarmuka.',
+        type: 'assignment',
+        timestamp: now.subtract(const Duration(hours: 81)), // ~3 hari 9 jam
         isRead: false,
       ),
-      
-      // Deadline reminder
       NotificationItem(
         id: '3',
-        title: 'Reminder: Tugas Akan Segera Berakhir',
-        message: 'Tugas Normalisasi Database akan berakhir dalam 2 hari. Segera submit!',
+        title: 'Tugas 01 - UID Android Mobile Game',
+        message: 'Mata kuliah DESAIN ANTARMUKA & PENGALAMAN PENGGUNA. Segera cek detail tugas dan tenggat waktunya.',
         type: 'assignment',
-        timestamp: now.subtract(const Duration(hours: 8)),
-        isRead: true,
-      ),
-      
-      // Nilai tugas
-      NotificationItem(
-        id: '4',
-        title: 'Nilai Tugas 2 Sudah Keluar',
-        message: 'Nilai untuk tugas Laravel CRUD sudah tersedia. Anda mendapat nilai: 85/100. Bagus!',
-        type: 'course',
         timestamp: now.subtract(const Duration(days: 1)),
         isRead: true,
       ),
-      
-      // Materi baru
+      NotificationItem(
+        id: '4',
+        title: 'PENGUMUMAN: Maintenance LMS',
+        message: 'Situs LMS tidak dapat diakses mulai pukul 00.00 s/d 06.00 WIB dikarenakan pemeliharaan sistem rutin.',
+        type: 'announcement',
+        timestamp: now.subtract(const Duration(days: 2)),
+        isRead: true,
+      ),
       NotificationItem(
         id: '5',
-        title: 'Materi Baru: Flutter State Management',
-        message: 'Dosen telah mengunggah materi baru tentang Provider dan Riverpod. Silakan dipelajari.',
-        type: 'course',
-        timestamp: now.subtract(const Duration(days: 1, hours: 5)),
-        isRead: true,
-      ),
-      
-      // System notification
-      NotificationItem(
-        id: '6',
         title: 'Selamat Datang di Smart UIM!',
-        message: 'Terima kasih telah bergabung dengan Learning Management System Universitas Islam Madura.',
+        message: 'Halo Dandy Candra Pratama, selamat bergabung di Learning Management System Universitas Islam Madura.',
         type: 'system',
-        timestamp: now.subtract(const Duration(days: 3)),
-        isRead: true,
-      ),
-      
-      // Quiz notification
-      NotificationItem(
-        id: '7',
-        title: 'Quiz: Algoritma Sorting Tersedia',
-        message: 'Quiz 1 untuk mata kuliah Algoritma sudah dapat dikerjakan. Waktu pengerjaan: 60 menit.',
-        type: 'assignment',
-        timestamp: now.subtract(const Duration(days: 4)),
-        isRead: true,
-      ),
-      
-      // Course update
-      NotificationItem(
-        id: '8',
-        title: 'Update: Jadwal Office Hours',
-        message: 'Pak Dosen akan mengadakan sesi tanya jawab online setiap Jumat pukul 14:00 via Zoom.',
-        type: 'announcement',
         timestamp: now.subtract(const Duration(days: 5)),
         isRead: true,
       ),
