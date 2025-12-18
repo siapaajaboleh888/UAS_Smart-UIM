@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../models/course.dart';
 import '../models/course_content.dart';
+import 'meeting_detail_screen.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   final Course course;
@@ -43,7 +44,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
           // Tab Selection
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
             child: TabBar(
               controller: _tabController,
               labelColor: AppColors.primary,
@@ -164,58 +165,77 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Week Badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                'Pertemuan ${item.week}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MeetingDetailScreen(
+                  courseName: widget.course.name,
+                  courseCode: widget.course.code,
+                  content: item,
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            
-            // Title and checkmark
-            Row(
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
+                // Week Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                   child: Text(
-                    '${item.week.toString().padLeft(2, '0')} - ${item.title}',
+                    'Pertemuan ${item.week}',
                     style: const TextStyle(
-                      fontSize: 14,
+                      color: Colors.white,
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                if (item.isCompleted)
-                  const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                const SizedBox(height: 12),
+                
+                // Title and checkmark
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${item.week.toString().padLeft(2, '0')} - ${item.title}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    if (item.isCompleted)
+                      const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                
+                // Info text
+                Text(
+                  item.info,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            
-            // Info text
-            Text(
-              item.info,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
