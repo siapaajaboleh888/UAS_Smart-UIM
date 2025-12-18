@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import 'home_screen.dart';
 import 'courses_screen.dart';
-import 'profile_screen.dart';
+import 'notification_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CoursesScreen(),
-    const ProfileScreen(),
+    const NotificationScreen(),  // Changed from ProfileScreen
   ];
 
   @override
@@ -53,9 +53,9 @@ class _MainScreenState extends State<MainScreen> {
               label: 'Kelas Saya',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Profile',
+              icon: Icon(Icons.notifications_outlined),
+              activeIcon: Icon(Icons.notifications),
+              label: 'Notifikasi',
             ),
           ],
         ),

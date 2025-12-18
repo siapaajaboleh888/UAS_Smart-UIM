@@ -6,6 +6,7 @@ import '../models/announcement.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
 import 'package:intl/intl.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -45,16 +46,27 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
+                          Row(
                           children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.white,
-                              child: Text(
-                                userInitials,
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to Profile screen
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileScreen(),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.white,
+                                child: Text(
+                                  userInitials,
+                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
@@ -86,8 +98,17 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.notifications_outlined, color: Colors.white),
-                              onPressed: () {},
+                              icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                              tooltip: 'Pengaturan',
+                              onPressed: () {
+                                // Navigate to Profile/Settings
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileScreen(),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
