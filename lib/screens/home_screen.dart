@@ -398,12 +398,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
+              image: course.imageUrl != null
+                  ? DecorationImage(
+                      image: course.imageUrl!.startsWith('http')
+                          ? NetworkImage(course.imageUrl!) as ImageProvider
+                          : AssetImage(course.imageUrl!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
-            child: const Icon(Icons.book, color: AppColors.primary, size: 20),
+            child: course.imageUrl == null
+                ? const Icon(Icons.book, color: AppColors.primary, size: 20)
+                : null,
           ),
           const SizedBox(width: 12),
           Expanded(
