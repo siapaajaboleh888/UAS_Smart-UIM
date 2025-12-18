@@ -28,14 +28,16 @@ class Course {
         instructor: 'Rofi Uddin, S.Kom., M.Kom',
         semester: '2024/2025',
         progress: 92,
+        imageUrl: 'https://cdn-icons-png.flaticon.com/512/5717/5717277.png', // Contoh icon mobile
       ),
       Course(
         id: '2',
         name: 'DESAIN ANTARMUKA & PENGALAMAN PENGGUNA',
         code: 'TIF-2202 [MSA]',
-        instructor: 'Moh. Syaiful Anam',
+        instructor: 'Aleandro Robery',
         semester: '2024/2025',
         progress: 88,
+        imageUrl: 'https://cdn-icons-png.flaticon.com/512/1260/1260111.png', // Contoh icon UI/UX
       ),
       Course(
         id: '3',

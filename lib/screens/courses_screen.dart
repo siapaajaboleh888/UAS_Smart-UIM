@@ -66,12 +66,20 @@ class CoursesScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient: AppColors.primaryGradient,
                         borderRadius: BorderRadius.circular(12),
+                        image: course.imageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(course.imageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      child: const Icon(
-                        Icons.book,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      child: course.imageUrl == null
+                          ? const Icon(
+                              Icons.book,
+                              color: Colors.white,
+                              size: 30,
+                            )
+                          : null,
                     ),
                     const SizedBox(width: 16),
                     Expanded(
