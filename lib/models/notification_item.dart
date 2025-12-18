@@ -72,7 +72,7 @@ class NotificationItem {
       NotificationItem(
         id: '5',
         title: 'Selamat Datang di Smart UIM!',
-        message: 'Halo Dandy Candra Pratama, selamat bergabung di Learning Management System Universitas Islam Madura.',
+        message: 'Halo Moh. Syaiful Anam, selamat bergabung di Learning Management System Universitas Islam Madura.',
         type: 'system',
         timestamp: now.subtract(const Duration(days: 5)),
         isRead: true,

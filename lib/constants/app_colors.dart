@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary Colors - Telkom University Green Theme
-  static const Color primary = Color(0xFF009247); // Telkom Green
+  // Primary Colors - Smart UIM Green Theme
+  static const Color primary = Color(0xFF009247); // UIM Green
   static const Color primaryDark = Color(0xFF006B33);
   static const Color primaryLight = Color(0xFF33A669);
   
