@@ -28,7 +28,7 @@ class Course {
         instructor: 'Rofi Uddin, S.Kom., M.Kom',
         semester: '2024/2025',
         progress: 92,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/5717/5717277.png', // Contoh icon mobile
+        imageUrl: 'assets/images/kampus_uim.jpg', // Placeholder image
       ),
       Course(
         id: '2',
@@ -37,7 +37,7 @@ class Course {
         instructor: 'Aleandro Robery',
         semester: '2024/2025',
         progress: 88,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/1260/1260111.png', // Contoh icon UI/UX
+        imageUrl: 'https://cdn-icons-png.flaticon.com/512/1260/1260111.png', // Keep network for this one for now
       ),
       Course(
         id: '3',
@@ -46,6 +46,7 @@ class Course {
         instructor: 'Ahmad Mahfud',
         semester: '2024/2025',
         progress: 90,
+        imageUrl: 'assets/images/sistem_basis_data.png',
       ),
       Course(
         id: '4',
@@ -54,6 +55,7 @@ class Course {
         instructor: 'Faisal',
         semester: '2024/2025',
         progress: 85,
+        imageUrl: 'assets/images/jaringan_komputer.jpg',
       ),
       Course(
         id: '5',
@@ -62,6 +64,7 @@ class Course {
         instructor: 'Nur Hidayah',
         semester: '2024/2025',
         progress: 91,
+        imageUrl: 'assets/images/algoritma_dan_struktur_data.jpg',
       ),
       Course(
         id: '6',
@@ -70,6 +73,7 @@ class Course {
         instructor: 'Ikhwan',
         semester: '2024/2025',
         progress: 87,
+        imageUrl: 'assets/images/rekayasa_perangkat_lunak.jpg',
       ),
       Course(
         id: '7',
@@ -78,6 +82,7 @@ class Course {
         instructor: 'Zainuddin',
         semester: '2024/2025',
         progress: 89,
+        imageUrl: 'assets/images/kecerdasan_buatan.jpg',
       ),
     ];
   }

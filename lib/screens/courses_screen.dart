@@ -68,7 +68,9 @@ class CoursesScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         image: course.imageUrl != null
                             ? DecorationImage(
-                                image: NetworkImage(course.imageUrl!),
+                                image: course.imageUrl!.startsWith('http')
+                                    ? NetworkImage(course.imageUrl!) as ImageProvider
+                                    : AssetImage(course.imageUrl!),
                                 fit: BoxFit.cover,
                               )
                             : null,
