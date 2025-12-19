@@ -617,8 +617,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   Text(
                     isIndonesian
-                        ? 'Login menggunakan akun Microsoft Office 365 dengan mengikuti petunjuk berikut:'
-                        : 'Login only using your Microsoft Office 365 account by following these format:',
+                        ? 'Login menggunakan akun uim.ac.id dengan mengikuti petunjuk berikut:'
+                        : 'Login only using your akun uim.ac.id account by following these format:',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[700],
@@ -659,7 +659,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Mail: info@uim.ac.id\nWhatsApp: +62 821-1666-3563',
+                    'Mail: info@uim.ac.id\nWhatsApp: +62 853-3415-9328',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

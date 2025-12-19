@@ -199,7 +199,7 @@ class MaterialContentScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              _buildInfoText('• No. HP: ${user?.phone ?? '085727930642'}'),
+                              _buildInfoText('• No. HP: ${user?.phone ?? '6285334159328'}'),
                               _buildInfoText('  SMS/Telp/WhatsApp'),
                             ],
                           ),

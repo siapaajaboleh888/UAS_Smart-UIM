@@ -43,7 +43,7 @@ class UserService {
         nim: '2022020100078',
         nama: 'MOH. SYAIFUL ANAM',
         email: 'syaifulanam@uim.ac.id',
-        phone: '082334455667',
+        phone: '6285334159328',
         prodi: 'Teknik Informatika',
         angkatan: '2022',
         password: 'anam1234', // Default password
