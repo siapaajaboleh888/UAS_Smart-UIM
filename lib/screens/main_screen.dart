@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import 'home_screen.dart';
 import 'courses_screen.dart';
 import 'notification_screen.dart';
+import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,15 +14,19 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CoursesScreen(),
-    const NotificationScreen(),  // Changed from ProfileScreen
-  ];
+  bool _showDashboard = false; // Flag to toggle between Profile and Dashboard on the first tab
 
   @override
   Widget build(BuildContext context) {
+    // Current screen logic for the first tab
+    Widget homeContent = _showDashboard ? const HomeScreen() : const ProfileScreen();
+
+    final List<Widget> _screens = [
+      homeContent,
+      const CoursesScreen(),
+      const NotificationScreen(),
+    ];
+
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
@@ -38,6 +43,10 @@ class _MainScreenState extends State<MainScreen> {
           currentIndex: _currentIndex,
           onTap: (index) {
             setState(() {
+              if (index == 0) {
+                // If clicking Home tab, always ensure dashboard is shown from now on
+                _showDashboard = true;
+              }
               _currentIndex = index;
             });
           },
