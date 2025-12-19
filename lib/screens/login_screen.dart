@@ -556,14 +556,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             const Divider(),
                             const SizedBox(height: 8),
                             Text(
-                              'Layanan CeLOE Helpdesk UIM:',
+                              'Layanan Helpdesk Smart UIM:',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
                             ),
                             Text(
-                              '📧 Mail: infoceloe@uim.ac.id\n📱 WhatsApp: +62 821-1666-3563',
+                              '📧 Mail: info@uim.ac.id\n📱 WhatsApp: +62 821-1666-3563',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: AppColors.textSecondary,
                               ),

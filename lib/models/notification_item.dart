@@ -40,7 +40,7 @@ class NotificationItem {
       NotificationItem(
         id: '1',
         title: 'Maintenance Pra UAS Semester Genap 2024/2025',
-        message: 'Diinformasikan kepada seluruh pengguna LMS, kami dari tim CeLOE akan melakukan maintenance pada tanggal 12 Juni 2025, untuk meningkatkan layanan server.',
+        message: 'Diinformasikan kepada seluruh pengguna LMS, kami dari tim Smart UIM akan melakukan maintenance pada tanggal 12 Juni 2025, untuk meningkatkan layanan server.',
         type: 'announcement',
         timestamp: now.subtract(const Duration(hours: 3, minutes: 30)),
         isRead: false,
