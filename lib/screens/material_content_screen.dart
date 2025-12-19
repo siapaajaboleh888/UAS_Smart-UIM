@@ -51,10 +51,26 @@ class MaterialContentScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: Stack(
+        children: [
+          // Full Screen Background Image (Gambar 2 - Campus UIM)
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/kampus_uim.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          // White overlay to make content readable while keeping the background visible
+          Positioned.fill(
+            child: Container(
+              color: Colors.white.withOpacity(0.93),
+            ),
+          ),
+          
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Header Image Section (Matches Figma layout in Image 3)
             Container(
               width: double.infinity,
@@ -278,7 +294,7 @@ class MaterialContentScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-              color: Colors.grey.shade50,
+              color: Colors.white.withOpacity(0.5),
               child: Column(
                 children: [
                   const Text(
@@ -308,7 +324,9 @@ class MaterialContentScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ],
+  ),
+);
   }
 
   Widget _buildPlaceholder() {
