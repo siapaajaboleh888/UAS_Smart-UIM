@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                       ),
                       tabs: const [
                         Tab(text: 'About Me'),
-                        Tab(text: 'Tasks'),
+                        Tab(text: 'Kelas'),
                         Tab(text: 'Edit Profile'),
                       ],
                     ),
@@ -200,8 +200,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   userPhone: userPhone,
                 ),
                 
-                // Tasks Tab
-                _buildTasksTab(),
+                // Kelas/Courses Tab
+                _buildCoursesTab(),
                 
                 // Edit Profile Tab
                 _buildEditProfileTab(context),
@@ -304,57 +304,85 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     );
   }
   
-  Widget _buildTasksTab() {
+  Widget _buildCoursesTab() {
+    final courses = Course.getSampleCourses();
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Tugas Aktif'),
+          _buildSectionTitle('Daftar Kelas'),
           const SizedBox(height: 16),
           
-          _buildTaskCard(
-            'Pemrograman Mobile',
-            'UAS - Membuat Aplikasi LMS',
-            'Deadline: 20 Des 2024',
-            Icons.code,
-            false,
+          ...courses.map((course) => _buildCourseItem(course)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCourseItem(Course course) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.textLight.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
-          
-          _buildTaskCard(
-            'Basis Data',
-            'Tugas 3 - Normalisasi Database',
-            'Deadline: 18 Des 2024',
-            Icons.storage,
-            false,
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.book, color: AppColors.primary, size: 24),
           ),
-          
-          _buildTaskCard(
-            'Jaringan Komputer',
-            'Praktek - Konfigurasi Router',
-            'Deadline: 22 Des 2024',
-            Icons.router,
-            false,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  course.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  course.instructor,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
           ),
-          
-          const SizedBox(height: 24),
-          _buildSectionTitle('Tugas Selesai'),
-          const SizedBox(height: 16),
-          
-          _buildTaskCard(
-            'Pemrograman Web',
-            'Tugas 2 - Laravel CRUD',
-            'Selesai: 15 Des 2024',
-            Icons.web,
-            true,
-          ),
-          
-          _buildTaskCard(
-            'Algoritma',
-            'Quiz 1 - Sorting Algorithm',
-            'Selesai: 10 Des 2024',
-            Icons.quiz,
-            true,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              '${course.progress}%',
+              style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
