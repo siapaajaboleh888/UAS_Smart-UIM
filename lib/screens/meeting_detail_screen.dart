@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import '../models/course_content.dart';
 import '../models/quiz.dart';
 import 'quiz_info_screen.dart';
+import 'material_content_screen.dart';
 
 class MeetingDetailScreen extends StatelessWidget {
   final String courseName;
@@ -358,7 +359,14 @@ class MeetingDetailScreen extends StatelessWidget {
                 ? const Icon(Icons.check_circle, color: AppColors.success, size: 20)
                 : Icon(Icons.circle_outlined, color: Colors.grey.shade300, size: 20),
             onTap: () {
-              // Handle open material
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MaterialContentScreen(
+                    title: item.title,
+                  ),
+                ),
+              );
             },
           ),
         );
