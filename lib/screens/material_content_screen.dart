@@ -54,24 +54,29 @@ class MaterialContentScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Image Section (Matches Image 2 layout)
+            // Header Image Section (Matches Figma layout in Image 3)
             Container(
               width: double.infinity,
-              height: 220,
+              height: 240,
               decoration: const BoxDecoration(
                 color: Color(0xFFF5F5F5),
               ),
               child: Stack(
                 children: [
-                  // Abstract/Course Image background
+                  // Background Image (Using local asset to prevent error)
                   Positioned.fill(
-                    child: Opacity(
-                      opacity: 0.1,
-                      child: Image.network(
-                        'https://img.freepik.com/free-vector/abstract-background-design-with-green-and-white-shades_1017-32115.jpg',
-                        fit: BoxFit.cover,
-                      ),
+                    child: Image.asset(
+                      'assets/images/kampus_uim.jpg',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(color: AppColors.primary.withOpacity(0.1));
+                      },
                     ),
+                  ),
+                  
+                  // Semi-transparent overlay
+                  Positioned.fill(
+                    child: Container(color: Colors.white.withOpacity(0.7)),
                   ),
                   
                   // Content Layout over header
@@ -79,47 +84,52 @@ class MaterialContentScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)
-                              ],
-                            ),
-                            child: const Column(
-                              children: [
-                                Icon(Icons.school, color: AppColors.primary, size: 40),
-                                Text(
-                                  'Smart UIM',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      // White Logo Box (Like Figma)
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)
+                            ],
                           ),
-                        ],
+                          child: Column(
+                            children: [
+                              const Icon(Icons.school, color: AppColors.primary, size: 50),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Smart UIM',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 20),
+                      // Title Box (Dark like Figma)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        color: Colors.black.withOpacity(0.6),
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 40),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.65),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                         child: const Column(
                           children: [
                             Text(
                               'Pengantar Desain',
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
                             ),
                             Text(
                               'Antarmuka Pengguna',
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
                             ),
                           ],
                         ),
@@ -132,7 +142,7 @@ class MaterialContentScreen extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Perkenalan Section
+            // Perkenalan Section (Mirroring Figma structure)
             Center(
               child: Column(
                 children: [
@@ -150,24 +160,20 @@ class MaterialContentScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Profile Image with border like in Image 2
+                        // Profile Image with circular border (Matches Figma)
                         Container(
-                          padding: const EdgeInsets.all(2),
+                          width: 94,
+                          height: 94,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary, width: 2),
+                            border: Border.all(color: Colors.grey.shade300, width: 1),
                           ),
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundColor: Colors.grey[200],
-                            backgroundImage: user?.photoPath != null
+                          child: ClipOval(
+                            child: user?.photoPath != null
                                 ? (user!.photoPath!.startsWith('http') 
-                                    ? NetworkImage(user.photoPath!) 
-                                    : AssetImage(user.photoPath!) as ImageProvider)
-                                : null,
-                            child: user?.photoPath == null
-                                ? const Icon(Icons.person, size: 45, color: Colors.grey)
-                                : null,
+                                    ? Image.network(user.photoPath!, fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder()) 
+                                    : Image.asset(user.photoPath!, fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder()))
+                                : _buildPlaceholder(),
                           ),
                         ),
                         const SizedBox(width: 24),
@@ -176,8 +182,8 @@ class MaterialContentScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildInfoText(user?.nama ?? 'MOH. SYAIFUL ANAM', isBold: true, size: 13),
-                              const SizedBox(height: 4),
+                              _buildInfoText(user?.nama ?? 'MOH. SYAIFUL ANAM', isBold: true, size: 12),
+                              const SizedBox(height: 6),
                               _buildInfoText('• E-mail: ${user?.email ?? 'syaifulanam@uim.ac.id'}'),
                               _buildInfoText('• NIM: ${user?.nim ?? '2022020100078'}'),
                               _buildInfoText('• Program Studi: ${user?.prodi ?? 'Teknik Informatika'}'),
@@ -205,15 +211,14 @@ class MaterialContentScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 40),
-            const Divider(indent: 24, endIndent: 24),
+            const SizedBox(height: 48),
+            const Divider(indent: 32, endIndent: 32, color: Color(0xFFEEEEEE)),
             const SizedBox(height: 32),
 
             // User Interface Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'User Interface',
@@ -223,7 +228,7 @@ class MaterialContentScreen extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildContentText(
                     'Antarmuka User Interface (UI) merupakan bagian dari komputer dan perangkat lunaknya yang dapat dilihat, didengar, disentuh, dan diajak bicara, baik secara langsung maupun dengan proses pemahaman tertentu.',
                   ),
@@ -231,21 +236,19 @@ class MaterialContentScreen extends StatelessWidget {
                   _buildContentText(
                     'UI yang baik adalah UI yang tidak disadari, dan UI yang membuat akan pengguna fokus pada informasi dan data tanpa perlu mengutak-atik mekanisme untuk menampilkan informasi dan melakukan hal tersebut.',
                   ),
-                  const SizedBox(height: 20),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Komponen utamanya:',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                    ),
-                  ),
+                  const SizedBox(height: 24),
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 16, top: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            'Komponen utamanya:',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                          ),
+                          SizedBox(height: 8),
                           Text('• Input', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
                           Text('• Output', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
                         ],
@@ -257,12 +260,12 @@ class MaterialContentScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 48),
-
-            // Pentingnya Desain Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+            // Background color for emphasis (Like Figma)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+              color: Colors.grey.shade50,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'Pentingnya Desain UI yang Baik',
@@ -272,7 +275,7 @@ class MaterialContentScreen extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildContentText(
                     'Banyak sistem dengan fungsionalitas yang baik tapi tidak efisien, membingungkan, dan tidak berguna karena desain UI yang buruk.',
                   ),
@@ -284,32 +287,31 @@ class MaterialContentScreen extends StatelessWidget {
                   _buildContentText(
                     'Desain yang buruk akan membingungkan, tidak efisien, bahkan menyebabkan frustasi.',
                   ),
-                  const SizedBox(height: 32),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      'https://img.freepik.com/free-vector/flat-uhd-ui-background_23-2148114441.jpg',
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 50),
                 ],
               ),
             ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoText(String text, {bool isBold = false, double size = 11}) {
+  Widget _buildPlaceholder() {
+    return Container(
+      color: Colors.grey.shade100,
+      child: Icon(Icons.person, size: 50, color: Colors.grey.shade400),
+    );
+  }
+
+  Widget _buildInfoText(String text, {bool isBold = false, double size = 10}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: Text(
         text,
         style: TextStyle(
           fontSize: size,
+          height: 1.3,
           fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           color: AppColors.textPrimary,
         ),
@@ -320,11 +322,11 @@ class MaterialContentScreen extends StatelessWidget {
   Widget _buildContentText(String text) {
     return Text(
       text,
-      textAlign: TextAlign.justify,
+      textAlign: TextAlign.center,
       style: const TextStyle(
         fontSize: 14,
         color: AppColors.textSecondary,
-        height: 1.6,
+        height: 1.7,
       ),
     );
   }
