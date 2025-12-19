@@ -14,163 +14,131 @@ class QuizReviewScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
+      appBar: AppBar(
+        title: const Text('Review Jawaban', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+        backgroundColor: AppColors.primary,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Column(
         children: [
-          // Header Background
+          // Result Summary Table
           Container(
-            height: 200,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: AppColors.primaryGradient,
+            padding: const EdgeInsets.all(20),
+            color: Colors.grey.shade50,
+            child: Table(
+              columnWidths: const {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(2),
+              },
+              children: [
+                _buildTableRow('Di Mulai Pada', 'Kamis, 25 Desember 2025, 10:00'),
+                _buildTableRow('Status', 'Selesai'),
+                _buildTableRow('Selesai Pada', 'Kamis, 25 Desember 2025, 10:45'),
+                _buildTableRow('Waktu Penyelesaian', '45 Menit 22 Detik'),
+                _buildTableRow('Nilai', '${score.toStringAsFixed(1)} / 100'),
+              ],
             ),
           ),
           
-          Column(
-            children: [
-              // Top Navigation Bar
-              Padding(
-                padding: const EdgeInsets.only(top: 40, left: 8, right: 8),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          'Review Jawaban',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Content Card
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      // Result Summary Padding
-                      Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildInfoColumn('Di Mulai Pada', '25 Desember 2025, 10:00'),
-                            _buildInfoColumn('Status', 'Selesai'),
-                            _buildInfoColumn('Nilai', '${score.toStringAsFixed(1)} / 100'),
-                          ],
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      
-                      // Questions List
-                      Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(24),
-                          itemCount: quiz.questions.length,
-                          separatorBuilder: (context, index) => const SizedBox(height: 24),
-                          itemBuilder: (context, index) {
-                            final question = quiz.questions[index];
-                            bool isCorrect = question.selectedAnswerIndex == question.correctAnswerIndex;
+          const Divider(height: 1),
+          
+          // Questions List
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(20),
+              itemCount: quiz.questions.length,
+              separatorBuilder: (context, index) => const Divider(height: 32),
+              itemBuilder: (context, index) {
+                final question = quiz.questions[index];
+                bool isCorrect = question.selectedAnswerIndex == question.correctAnswerIndex;
+                String label = question.selectedAnswerIndex != null 
+                    ? String.fromCharCode(65 + question.selectedAnswerIndex!) 
+                    : '-';
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Pertanyaan ${index + 1}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  question.text,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey.shade700,
-                                    height: 1.4,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: isCorrect ? AppColors.success.withOpacity(0.1) : AppColors.error.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: isCorrect ? AppColors.success : AppColors.error,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Jawaban Terpilih:',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          color: isCorrect ? AppColors.success : AppColors.error,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        question.selectedAnswerIndex != null 
-                                            ? question.options[question.selectedAnswerIndex!] 
-                                            : 'Tidak Dijawab',
-                                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pertanyaan ${index + 1}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: AppColors.textPrimary,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      question.text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade800,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Jawaban Terpilih:',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            question.selectedAnswerIndex != null 
+                                ? '$label. ${question.options[question.selectedAnswerIndex!]}' 
+                                : 'Tidak Dijawab',
+                            style: TextStyle(
+                              fontSize: 12, 
+                              fontWeight: FontWeight.w600,
+                              color: isCorrect ? Colors.green.shade700 : Colors.red.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoColumn(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  TableRow _buildTableRow(String label, String value) {
+    return TableRow(
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            ': $value',
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          ),
         ),
       ],
     );

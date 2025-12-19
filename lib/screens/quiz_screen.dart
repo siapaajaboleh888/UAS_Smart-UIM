@@ -72,12 +72,12 @@ class _QuizScreenState extends State<QuizScreen> {
           Container(
             padding: const EdgeInsets.only(top: 40, bottom: 20, left: 16, right: 16),
             decoration: const BoxDecoration(
-              gradient: AppColors.primaryGradient,
+              color: AppColors.primary,
             ),
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
                 Expanded(
@@ -100,7 +100,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.timer_outlined, color: Colors.white, size: 16),
+                      const Icon(Icons.alarm, color: Colors.white, size: 18),
                       const SizedBox(width: 4),
                       Text(
                         _formatTime(_secondsRemaining),
@@ -117,34 +117,38 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
 
-          // Question Navigation
-          Padding(
+          // Question Navigation (Circles)
+          Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            color: Colors.white,
             child: Wrap(
               spacing: 8,
               runSpacing: 8,
               alignment: WrapAlignment.center,
               children: List.generate(widget.quiz.questions.length, (index) {
-                bool isSelected = index == _currentQuestionIndex;
+                bool isCurrent = index == _currentQuestionIndex;
                 bool isAnswered = widget.quiz.questions[index].selectedAnswerIndex != null;
                 
                 return GestureDetector(
                   onTap: () => setState(() => _currentQuestionIndex = index),
                   child: Container(
-                    width: 24,
-                    height: 24,
+                    width: 28,
+                    height: 28,
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : (isAnswered ? AppColors.primary.withOpacity(0.2) : Colors.white),
-                      border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
+                      color: isAnswered ? AppColors.primary : Colors.white,
+                      border: Border.all(
+                        color: isCurrent ? AppColors.primary : Colors.grey.shade400,
+                        width: isCurrent ? 2 : 1,
+                      ),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: Text(
                         '${index + 1}',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? Colors.white : (isAnswered ? AppColors.primary : Colors.grey.shade600),
+                          color: isAnswered ? Colors.white : (isCurrent ? AppColors.primary : Colors.grey.shade600),
                         ),
                       ),
                     ),
@@ -154,12 +158,12 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
 
-          const Divider(height: 1),
+          const Divider(height: 1, thickness: 1),
 
           // Question Content
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -178,6 +182,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       fontSize: 15,
                       color: AppColors.textPrimary,
                       height: 1.5,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -187,51 +192,46 @@ class _QuizScreenState extends State<QuizScreen> {
                     bool isSelected = currentQuestion.selectedAnswerIndex == index;
 
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 16),
                       child: InkWell(
                         onTap: () {
                           setState(() {
                             currentQuestion.selectedAnswerIndex = index;
                           });
                         },
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.grey.shade50,
-                            border: Border.all(
-                              color: isSelected ? AppColors.primary : Colors.transparent,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                            color: isSelected ? AppColors.primary : Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              if (isSelected)
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.2),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                            ],
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  color: isSelected ? AppColors.primary : Colors.white,
-                                  border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    label,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: isSelected ? Colors.white : Colors.grey.shade600,
-                                    ),
-                                  ),
+                              Text(
+                                '$label.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: isSelected ? Colors.white : AppColors.textPrimary,
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
                                   option,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                    color: isSelected ? Colors.white : AppColors.textPrimary,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -246,47 +246,75 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
 
-          // Bottom Navigation
-          Padding(
+          // Bottom Navigation Buttons
+          Container(
             padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (_currentQuestionIndex > 0)
-                  TextButton(
-                    onPressed: () {
-                      setState(() => _currentQuestionIndex--);
-                    },
-                    child: const Text('Sebelumnya', style: TextStyle(color: AppColors.primary)),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => setState(() => _currentQuestionIndex--),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: const BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Soal Sebelumnya',
+                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 13),
+                      ),
+                    ),
                   )
                 else
-                  const SizedBox(),
+                  const Spacer(),
                 
-                ElevatedButton(
-                  onPressed: () {
-                    if (_currentQuestionIndex < widget.quiz.questions.length - 1) {
-                      setState(() => _currentQuestionIndex++);
-                    } else {
-                      _submitQuiz();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(width: 16),
+                
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_currentQuestionIndex < widget.quiz.questions.length - 1) {
+                        setState(() => _currentQuestionIndex++);
+                      } else {
+                        _submitQuiz();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _currentQuestionIndex == widget.quiz.questions.length - 1 
+                          ? Colors.green.shade600 
+                          : AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    _currentQuestionIndex == widget.quiz.questions.length - 1 ? 'Selesai' : 'Soal Selanjutnya',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: Text(
+                      _currentQuestionIndex == widget.quiz.questions.length - 1 ? 'Selesai' : 'Soal Selanjutnya',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
         ],
       ),
     );
