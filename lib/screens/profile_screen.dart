@@ -7,6 +7,7 @@ import 'dart:convert';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
+import '../models/course.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
