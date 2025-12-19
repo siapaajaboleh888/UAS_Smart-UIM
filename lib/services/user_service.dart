@@ -48,12 +48,33 @@ class UserService {
         angkatan: '2022',
         password: 'anam1234', // Default password
         role: 'MAHASISWA',
+        photoPath: 'https://i.pravatar.cc/300?img=12', // Profile photo
       );
       _registeredUsers.add(defaultUser);
       await _saveData();
       print('✅ Initialized default user: ${defaultUser.nama}');
       print('   Email: ${defaultUser.email}');
       print('   Password: anam1234');
+    } else {
+      // Migration: Ensure default user has photo if it's missing
+      bool needsSave = false;
+      for (int i = 0; i < _registeredUsers.length; i++) {
+        if (_registeredUsers[i].nim == '2022020100078' && _registeredUsers[i].photoPath == null) {
+          _registeredUsers[i] = _registeredUsers[i].copyWith(
+            photoPath: 'https://i.pravatar.cc/300?img=12'
+          );
+          needsSave = true;
+          
+          // Also update current user if it's the same
+          if (_currentUser?.nim == '2022020100078') {
+            _currentUser = _registeredUsers[i];
+          }
+        }
+      }
+      if (needsSave) {
+        await _saveData();
+        print('✅ Migrated default user to include profile photo');
+      }
     }
   }
 

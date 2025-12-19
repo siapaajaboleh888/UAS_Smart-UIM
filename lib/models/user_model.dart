@@ -99,4 +99,28 @@ class UserModel {
       photoPath: map['photoPath'],
     );
   }
+
+  UserModel copyWith({
+    String? nim,
+    String? nama,
+    String? email,
+    String? phone,
+    String? prodi,
+    String? angkatan,
+    String? role,
+    String? passwordHash,
+    String? photoPath,
+  }) {
+    return UserModel(
+      nim: nim ?? this.nim,
+      nama: nama ?? this.nama,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      prodi: prodi ?? this.prodi,
+      angkatan: angkatan ?? this.angkatan,
+      role: role ?? this.role,
+      passwordHash: passwordHash ?? this.passwordHash,
+      photoPath: photoPath ?? this.photoPath,
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
@@ -169,10 +170,12 @@ class MaterialContentScreen extends StatelessWidget {
                             border: Border.all(color: Colors.grey.shade300, width: 1),
                           ),
                           child: ClipOval(
-                            child: user?.photoPath != null
+                            child: user?.photoPath != null && user!.photoPath!.isNotEmpty
                                 ? (user!.photoPath!.startsWith('http') 
                                     ? Image.network(user.photoPath!, fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder()) 
-                                    : Image.asset(user.photoPath!, fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder()))
+                                    : (user!.photoPath!.startsWith('data:')
+                                        ? Image.memory(base64Decode(user.photoPath!.split(',')[1]), fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder())
+                                        : Image.asset(user.photoPath!, fit: BoxFit.cover, errorBuilder: (c,e,s) => _buildPlaceholder())))
                                 : _buildPlaceholder(),
                           ),
                         ),

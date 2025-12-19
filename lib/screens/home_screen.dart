@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import '../constants/app_colors.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
@@ -163,13 +164,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   CircleAvatar(
                     radius: 24,
                     backgroundColor: Colors.white,
-                    child: Text(
-                      userInitials,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    child: ClipOval(
+                      child: user?.photoPath != null && user!.photoPath!.isNotEmpty
+                          ? (user.photoPath!.startsWith('http')
+                              ? Image.network(
+                                  user.photoPath!,
+                                  width: 48,
+                                  height: 48,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => _buildInitialsAvatarSmall(userInitials),
+                                )
+                              : (user.photoPath!.startsWith('data:')
+                                  ? Image.memory(
+                                      base64Decode(user.photoPath!.split(',')[1]),
+                                      width: 48,
+                                      height: 48,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) => _buildInitialsAvatarSmall(userInitials),
+                                    )
+                                  : Image.asset(
+                                      user.photoPath!,
+                                      width: 48,
+                                      height: 48,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) => _buildInitialsAvatarSmall(userInitials),
+                                    )))
+                          : _buildInitialsAvatarSmall(userInitials),
                     ),
                   ),
                   Positioned(
@@ -476,6 +496,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildInitialsAvatarSmall(String initials) {
+    return Center(
+      child: Text(
+        initials,
+        style: const TextStyle(
+          color: AppColors.primary,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
     );
   }
 }

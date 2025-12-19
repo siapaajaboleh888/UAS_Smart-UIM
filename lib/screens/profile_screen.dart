@@ -712,8 +712,18 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         }
       }
       
-      // For legacy blob or network
+      // Check if it's a network URL
+      if (imagePath.startsWith('http')) {
+        return Image.network(
+          imagePath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildInitialsAvatar(initials),
+        );
+      }
+      
+      // For legacy blob/file or network
       if (kIsWeb) {
+        // On web, if it's not base64 or http, it might be a blob or asset path
         return Image.network(
           imagePath,
           fit: BoxFit.cover,
