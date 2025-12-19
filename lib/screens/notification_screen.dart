@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../models/notification_item.dart';
+import 'announcement_detail_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -257,13 +258,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
               if (!notification.isRead) {
                 _markAsRead(notification.id);
               }
-              // Could navigate to related content here
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Membuka: ${notification.title}'),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
+              
+              if (notification.type == 'announcement') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AnnouncementDetailScreen(notification: notification),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Membuka: ${notification.title}'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              }
             },
             child: Padding(
               padding: const EdgeInsets.all(16),
