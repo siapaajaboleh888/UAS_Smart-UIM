@@ -75,9 +75,20 @@ class MaterialContentScreen extends StatelessWidget {
                     ),
                   ),
                   
-                  // Semi-transparent overlay
+                  // Dark gradient overlay for a more premium look (Matches Login UI)
                   Positioned.fill(
-                    child: Container(color: Colors.white.withOpacity(0.7)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.3),
+                            Colors.black.withOpacity(0.7),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   
                   // Content Layout over header
