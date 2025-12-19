@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   List<String> _registeredEmails = [];
   bool _showEmailSuggestions = false;
+  String _helpLanguage = 'id';
 
   @override
   void initState() {
@@ -510,65 +511,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       const SizedBox(height: 24),
                       
-                      // Help Info Card
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.info.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: AppColors.info.withOpacity(0.3),
+                      const SizedBox(height: 12),
+                      
+                      // Bantuan Link
+                      Center(
+                        child: TextButton(
+                          onPressed: () => _showHelpBottomSheet(context),
+                          child: Text(
+                            'Bantuan ?',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.info_outline, color: AppColors.info, size: 20),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Akses Mahasiswa & Dosen',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: AppColors.info,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'Login menggunakan Akun Microsoft Office 365 UIM:',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '• Username: Akun iGracias / NIM ditambahkan "@uim.ac.id"\n• Password: Gunakan password SSO Anda.\n\nPastikan Anda telah mengubah password menjadi "Strong Password" di iGracias jika terjadi kegagalan autentikasi.',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                                height: 1.4,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            const Divider(),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Layanan Helpdesk Smart UIM:',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            Text(
-                              '📧 Mail: info@uim.ac.id\n📱 WhatsApp: +62 821-1666-3563',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],
@@ -577,6 +533,182 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showHelpBottomSheet(BuildContext parentContext) {
+    showModalBottomSheet(
+      context: parentContext,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            bool isIndonesian = _helpLanguage == 'id';
+
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Drag Handle
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Flags Language Toggle
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildLanguageOption(
+                        'id',
+                        '🇮🇩',
+                        'ID',
+                        isIndonesian,
+                        () {
+                          setModalState(() => _helpLanguage = 'id');
+                          setState(() => _helpLanguage = 'id');
+                        },
+                      ),
+                      const SizedBox(width: 40),
+                      _buildLanguageOption(
+                        'en',
+                        '🇬🇧',
+                        'EN',
+                        !isIndonesian,
+                        () {
+                          setModalState(() => _helpLanguage = 'en');
+                          setState(() => _helpLanguage = 'en');
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Content
+                  Text(
+                    isIndonesian
+                        ? 'Akses hanya untuk Dosen dan mahasiswa Universitas Islam Madura.'
+                        : 'Access restricted only for lecturer and student of Universitas Islam Madura.',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    isIndonesian
+                        ? 'Login menggunakan akun Microsoft Office 365 dengan mengikuti petunjuk berikut:'
+                        : 'Login only using your Microsoft Office 365 account by following these format:',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    isIndonesian
+                        ? 'Username (NIM/NIDN) ditambahkan "@uim.ac.id" Password pada kolom Password.'
+                        : 'Username (NIM/NIDN) followed with "@uim.ac.id" Password on Password field.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    isIndonesian
+                        ? 'Kegagalan yang terjadi pada Autentikasi disebabkan oleh Anda belum mengubah Password Anda menjadi \'Strong Password\'. Pastikan Anda telah melakukan perubahan Password di Portal UIM.'
+                        : 'Failure upon Authentication could be possibly you have not yet change your password into "Strong Password". Make sure to change your Password only in UIM Portal.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    isIndonesian
+                        ? 'Informasi lebih lanjut dapat menghubungi Layanan Smart UIM Helpdesk di:'
+                        : 'For further information, please contact Smart UIM Service Desk Helpdesk:',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Mail: info@uim.ac.id\nWhatsApp: +62 821-1666-3563',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    String code,
+    String flag,
+    String label,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            Text(
+              flag,
+              style: const TextStyle(fontSize: 32),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? AppColors.primary : Colors.grey[600],
+              ),
+            ),
+          ],
         ),
       ),
     );
