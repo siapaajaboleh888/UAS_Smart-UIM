@@ -269,31 +269,34 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           _buildInfoItem('First access to site', firstAccess),
           _buildInfoItem('Last access to site', loginTime),
           
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
           
-          // Logout Button
-          SizedBox(
-            width: double.infinity,
-            height: 50,
+          // Logout Button - Refined Compact Style
+          Align(
+            alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () => _showLogoutDialog(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                elevation: 4,
+                shadowColor: AppColors.error.withOpacity(0.4),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.logout, color: Colors.white),
+                  Icon(Icons.logout, color: Colors.white, size: 18),
                   SizedBox(width: 8),
                   Text(
                     'Log Out',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ],
