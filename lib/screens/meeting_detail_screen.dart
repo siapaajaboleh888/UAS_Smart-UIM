@@ -168,34 +168,24 @@ class MeetingDetailScreen extends StatelessWidget {
   }
 
   Widget _buildTaskCard(BuildContext context, CourseContent item) {
-    // Determine color based on badge text (info)
-    Color badgeColor = Colors.blue.shade400;
-    if (item.info.toLowerCase().contains('kuis')) {
-      badgeColor = Colors.blue.shade400;
-    } else if (item.info.toLowerCase().contains('tugas')) {
-      badgeColor = Colors.cyan.shade400;
-    } else if (item.info.toLowerCase().contains('pertemuan')) {
-      badgeColor = Colors.blue.shade600;
-    }
-
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           onTap: () {
             if (item.info.toLowerCase().contains('kuis')) {
               Navigator.push(
@@ -213,45 +203,43 @@ class MeetingDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Type Badge
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: badgeColor,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    item.info.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
+                // Header row with icon, title and status
+                Row(
+                  children: [
+                    Text(
+                      item.title,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ),
+                    const Spacer(),
+                    Icon(
+                      Icons.check_circle,
+                      color: item.isCompleted ? AppColors.success : Colors.grey.shade300,
+                      size: 16,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Icon placeholder
+                    // Icon container
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 48,
+                      height: 48,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade200),
                       ),
                       child: Center(
                         child: item.info.toLowerCase().contains('kuis') 
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.quiz_outlined, size: 18, color: AppColors.textPrimary),
-                                Text('Quiz', style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold, color: Colors.grey.shade700)),
-                              ],
-                            )
-                          : const Icon(Icons.assignment_outlined, size: 24, color: AppColors.textPrimary),
+                          ? const Icon(Icons.quiz_outlined, size: 28, color: AppColors.textPrimary)
+                          : const Icon(Icons.assignment_outlined, size: 28, color: AppColors.textPrimary),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -260,27 +248,28 @@ class MeetingDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item.title,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                            item.description,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade700,
+                              height: 1.4,
                             ),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           if (item.deadline.isNotEmpty)
                             Text(
-                              'Tanggal Waktu : ${item.deadline}',
+                              'Deadline sebelum: ${item.deadline}',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.grey.shade500,
+                                color: Colors.grey.shade400,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                         ],
                       ),
                     ),
-                    if (item.isCompleted)
-                      const Icon(Icons.check_circle, color: AppColors.success, size: 20),
                   ],
                 ),
               ],
@@ -349,25 +338,45 @@ class MeetingDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-          child: ListTile(
-            leading: Icon(item.icon, color: AppColors.textPrimary, size: 20),
-            title: Text(
-              item.title,
-              style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
-            ),
-            trailing: item.isCompleted
-                ? const Icon(Icons.check_circle, color: AppColors.success, size: 20)
-                : Icon(Icons.circle_outlined, color: Colors.grey.shade300, size: 20),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MaterialContentScreen(
-                    title: item.title,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MaterialContentScreen(
+                      title: item.title,
+                    ),
                   ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    Icon(item.icon, color: AppColors.textPrimary, size: 20),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        item.title,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.check_circle,
+                      color: item.isCompleted ? AppColors.success : Colors.grey.shade300,
+                      size: 20,
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           ),
         );
       },
