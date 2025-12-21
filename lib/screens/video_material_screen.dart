@@ -46,7 +46,7 @@ class VideoMaterialScreen extends StatelessWidget {
                 children: [
                   // Full background image with overlay
                   Image.asset(
-                    'assets/images/kampus_uim.jpg',
+                    'assets/images/video_thumb_0.jpg',
                     width: double.infinity,
                     fit: BoxFit.cover,
                     opacity: const AlwaysStoppedAnimation(0.5),
@@ -129,23 +129,23 @@ class VideoMaterialScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 _buildVideoListItem(
-                  'Interaction Design',
-                  'assets/images/kampus_uim.jpg',
+                  'UI/UX Design - Apple Style Material',
+                  'assets/images/video_thumb_1.jpg',
                   '05:24',
                 ),
                 _buildVideoListItem(
-                  'Pengantar Desain Antarmuka Pengguna',
-                  'assets/images/kampus_uim.jpg',
+                  'YouTube Interface Guide - Devices',
+                  'assets/images/video_thumb_2.jpg',
                   '12:45',
                 ),
                 _buildVideoListItem(
-                  '4 Teori Dasar Desain Antarmuka Pengguna',
-                  'assets/images/kampus_uim.jpg',
+                  'Homepage Design with Reusable Components',
+                  'assets/images/video_thumb_3.jpg',
                   '08:12',
                 ),
                 _buildVideoListItem(
-                  'Tutorial Dasar Figma - Persiapan Desain Mobile App',
-                  'assets/images/kampus_uim.jpg',
+                  'YouTube New Look - New UI/UX Analysis',
+                  'assets/images/video_thumb_4.jpg',
                   '15:30',
                 ),
                 _buildVideoListItem(
