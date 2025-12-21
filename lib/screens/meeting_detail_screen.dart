@@ -4,6 +4,7 @@ import '../models/course_content.dart';
 import '../models/quiz.dart';
 import 'quiz_info_screen.dart';
 import 'material_content_screen.dart';
+import 'video_material_screen.dart';
 
 class MeetingDetailScreen extends StatelessWidget {
   final String courseName;
@@ -343,14 +344,25 @@ class MeetingDetailScreen extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MaterialContentScreen(
-                      title: item.title,
+                if (item.title == 'User Interface Design for Beginner') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoMaterialScreen(
+                        title: item.title,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MaterialContentScreen(
+                        title: item.title,
+                      ),
+                    ),
+                  );
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
