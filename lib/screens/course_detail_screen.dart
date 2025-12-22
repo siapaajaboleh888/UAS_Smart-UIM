@@ -5,6 +5,7 @@ import '../models/course_content.dart';
 import '../models/quiz.dart';
 import 'meeting_detail_screen.dart';
 import 'quiz_info_screen.dart';
+import 'assignment_detail_screen.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   final Course course;
@@ -274,12 +275,23 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            if (item.info.toLowerCase().contains('kuis')) {
+            if (item.info.toLowerCase().contains('kuis') || item.title.toLowerCase().contains('kuis')) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => QuizInfoScreen(
                     quiz: Quiz.getSampleQuizzes().first,
+                  ),
+                ),
+              );
+            } else if (item.info.toLowerCase().contains('tugas') || item.title.toLowerCase().contains('tugas')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignmentDetailScreen(
+                    title: item.title,
+                    deadline: item.deadline,
+                    description: item.description,
                   ),
                 ),
               );

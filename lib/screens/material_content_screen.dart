@@ -178,6 +178,14 @@ class MaterialContentScreen extends StatelessWidget {
                    _buildTeoriDasarContent()
                 else if (title.contains('Best Practice'))
                    _buildBestPracticeContent()
+                else if (title.contains('Interaksi') || title.contains('Prototyping'))
+                   _buildInteraksiContent()
+                else if (title.contains('Observasi') || title.contains('Etnografi') || title.contains('Ethnographic'))
+                   _buildEthnographicContent()
+                else if (title.contains('Testing') || title.contains('Analisis'))
+                   _buildTestingContent()
+                else if (title.contains('Assessment') || title.contains('Review') || title.contains('Quiz'))
+                   _buildAssessmentContent()
                 else
                   _buildIntroContent(user),
                   
@@ -501,6 +509,86 @@ class MaterialContentScreen extends StatelessWidget {
           _buildGuidelineItem('Be purposeful in layout', 'Pikirkan tentang hubungan spasial antar item di halaman.'),
           _buildGuidelineItem('Use color and texture strategically', 'Anda dapat menarik perhatian ke atau mengalihkan perhatian dari item menggunakan warna.'),
           _buildGuidelineItem('Use typography for hierarchy', 'Berikan bobot berbeda pada teks untuk memandu pengguna.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInteraksiContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Interaksi pada UID'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText('Interaksi desain fokus pada bagaimana pengguna berinteraksi dengan produk dan bagaimana produk merespons interaksi tersebut.'),
+          const SizedBox(height: 32),
+          _buildGuidelineItem('Teori Interaksi', 'Mempelajari model interaksi manusia-komputer dan siklus tindakan pengguna.'),
+          _buildGuidelineItem('Latihan Prototyping', 'Membuat simulasi interaksi menggunakan alat desain untuk memvalidasi alur pengguna.'),
+          _buildGuidelineItem('Feedback & Response', 'Memastikan setiap input pengguna mendapatkan respons visual atau suara yang sesuai.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEthnographicContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Ethnographic Observation'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText('Metode observasi untuk memahami bagaimana pengguna sebenarnya menggunakan teknologi dalam konteks kehidupan nyata mereka.'),
+          const SizedBox(height: 32),
+          _buildGuidelineItem('Panduan Observasi', 'Langkah-langkah melakukan pengamatan tanpa menginterupsi aktivitas asli pengguna.'),
+          _buildGuidelineItem('Studi Kasus Etnografi', 'Analisis mendalam tentang perilaku pengguna berdasarkan data lapangan yang dikumpulkan.'),
+          _buildGuidelineItem('Analisis Data Lapangan', 'Mengubah temuan observasi menjadi peluang desain (design opportunities).'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTestingContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('UID Testing & Analysis'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText('Proses evaluasi desain dengan melibatkan pengguna nyata untuk menemukan masalah kegunaan (usability issues).'),
+          const SizedBox(height: 32),
+          _buildGuidelineItem('Metodologi Testing', 'Pilihan metode seperti Usability Testing, A/B Testing, atau Heuristic Evaluation.'),
+          _buildGuidelineItem('Analisis Hasil Testing', 'Mengidentifikasi pola kesalahan pengguna dan menentukan prioritas perbaikan desain.'),
+          _buildGuidelineItem('Iterasi Desain', 'Menggunakan umpan balik pengujian untuk memperbaiki dan menyempurnakan antarmuka.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAssessmentContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Assessment & Review'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText('Tahap evaluasi untuk mengukur pemahaman materi yang telah dipelajari dari pertemuan 1 hingga 5.'),
+          const SizedBox(height: 32),
+          _buildGuidelineItem('Review Materi 1-5', 'Rangkuman poin-poin penting dari pengantar desain hingga tahap pengujian.'),
+          _buildGuidelineItem('Quiz Persiapan', 'Latihan soal untuk mempersiapkan mahasiswa menghadapi evaluasi formal.'),
+          _buildGuidelineItem('Diskusi Portofolio', 'Pembahasan hasil tugas mandiri dan progres proyek kelompok.'),
         ],
       ),
     );
