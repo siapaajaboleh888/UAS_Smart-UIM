@@ -164,6 +164,8 @@ class MaterialContentScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 32),
+                const Divider(height: 1, thickness: 1, color: Color(0xFFFFCCCC)),
+                const SizedBox(height: 32),
 
                 // Dynamic Content based on Title
                 if (title.contains('Guidelines') || title.contains('Principles'))
@@ -253,22 +255,22 @@ class MaterialContentScreen extends StatelessWidget {
                         children: [
                           _buildInfoText(user?.nama ?? 'MOH. SYAIFUL ANAM', isBold: true, size: 12),
                           const SizedBox(height: 6),
-                          _buildInfoText('• E-mail: ${user?.email ?? 'syaifulanam@uim.ac.id'}'),
-                          _buildInfoText('• NIM: ${user?.nim ?? '2022020100078'}'),
-                          _buildInfoText('• Program Studi: ${user?.prodi ?? 'Teknik Informatika'}'),
+                          _buildInfoRow('E-mail: ${user?.email ?? 'syaifulanam@uim.ac.id'}'),
+                          _buildInfoRow('NIM: ${user?.nim ?? '2022020100078'}'),
+                          _buildInfoRow('Program Studi: ${user?.prodi ?? 'Teknik Informatika'}'),
                           _buildInfoText('• Bidang Keahlian:'),
                           Padding(
                             padding: const EdgeInsets.only(left: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildInfoText('- Information System'),
-                                _buildInfoText('- Web Programming and Design'),
-                                _buildInfoText('- Mobile Development'),
+                                _buildInfoRow('Information System', isSubItem: true),
+                                _buildInfoRow('Web Programming and Design', isSubItem: true),
+                                _buildInfoRow('Mobile Development', isSubItem: true),
                               ],
                             ),
                           ),
-                          _buildInfoText('• No. HP: ${user?.phone ?? '6285334159328'}'),
+                          _buildInfoRow('No. HP: ${user?.phone ?? '6285334159328'}'),
                         ],
                       ),
                     ),
@@ -278,22 +280,23 @@ class MaterialContentScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 48),
-        const Divider(indent: 32, endIndent: 32, color: Color(0xFFEEEEEE)),
+        const SizedBox(height: 32),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFFFCCCC)),
         const SizedBox(height: 32),
         
         // User Interface Section
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionHeading('User Interface'),
+              Center(child: _buildSectionHeading('User Interface')),
               const SizedBox(height: 24),
-              _buildContentText(
+              _buildBulletedText(
                 'Antarmuka User Interface (UI) merupakan bagian dari komputer dan perangkat lunaknya yang dapat dilihat, didengar, disentuh, dan diajak bicara, baik secara langsung maupun dengan proses pemahaman tertentu.',
               ),
-              const SizedBox(height: 16),
-              _buildContentText(
+              const SizedBox(height: 8),
+              _buildBulletedText(
                 'UI yang baik adalah UI yang tidak disadari, dan UI yang membuat akan pengguna fokus pada informasi dan data tanpa perlu mengutak-atik mekanisme untuk menampilkan informasi dan melakukan hal tersebut.',
               ),
               const SizedBox(height: 24),
@@ -308,9 +311,22 @@ class MaterialContentScreen extends StatelessWidget {
                         'Komponen utamanya:',
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                       ),
+                      SizedBox(height: 12),
+                      Row(
+                        children: [
+                          _BulletPoint(),
+                          SizedBox(width: 12),
+                          Text('Input', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+                        ],
+                      ),
                       SizedBox(height: 8),
-                      Text('• Input', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
-                      Text('• Output', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
+                      Row(
+                        children: [
+                          _BulletPoint(),
+                          SizedBox(width: 12),
+                          Text('Output', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -319,24 +335,27 @@ class MaterialContentScreen extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 48),
+        const SizedBox(height: 32),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFFFCCCC)),
+        const SizedBox(height: 32),
         
         // Importance Section
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionHeading('Pentingnya Desain UI yang Baik'),
+              Center(child: _buildSectionHeading('Pentingnya Desain UI yang Baik')),
               const SizedBox(height: 24),
-              _buildContentText(
+              _buildBulletedText(
                 'Banyak sistem dengan fungsionalitas yang baik tapi tidak efisien, membingungkan, dan tidak berguna karena desain UI yang buruk.',
               ),
-              const SizedBox(height: 12),
-              _buildContentText(
+              const SizedBox(height: 8),
+              _buildBulletedText(
                 'Antarmuka yang baik merupakan jendela untuk melihat kemampuan dalam serta jembatan bagi kemampuan perangkat lunak.',
               ),
-              const SizedBox(height: 12),
-              _buildContentText(
+              const SizedBox(height: 8),
+              _buildBulletedText(
                 'Desain yang buruk akan membingungkan, tidak efisien, bahkan menyebabkan frustasi.',
               ),
             ],
@@ -481,6 +500,70 @@ class MaterialContentScreen extends StatelessWidget {
         fontSize: 14,
         color: AppColors.textSecondary,
         height: 1.7,
+      ),
+    );
+  }
+
+  Widget _buildBulletedText(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 8, right: 12),
+          child: _BulletPoint(),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              height: 1.6,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String text, {bool isSubItem = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 5, right: isSubItem ? 8 : 6),
+            child: _BulletPoint(size: isSubItem ? 3 : 4),
+          ),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 10,
+                height: 1.3,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BulletPoint extends StatelessWidget {
+  final double size;
+  const _BulletPoint({this.size = 5});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        shape: BoxShape.circle,
       ),
     );
   }
