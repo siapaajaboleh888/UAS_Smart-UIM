@@ -6,6 +6,7 @@ import 'quiz_info_screen.dart';
 import 'material_content_screen.dart';
 import 'video_material_screen.dart';
 import 'meeting_link_screen.dart';
+import 'assignment_detail_screen.dart';
 
 class MeetingDetailScreen extends StatelessWidget {
   final String courseName;
@@ -195,6 +196,17 @@ class MeetingDetailScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => QuizInfoScreen(
                     quiz: Quiz.getSampleQuizzes().first,
+                  ),
+                ),
+              );
+            } else if (item.info.toLowerCase().contains('tugas')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignmentDetailScreen(
+                    title: item.title,
+                    deadline: item.deadline,
+                    description: item.description,
                   ),
                 ),
               );

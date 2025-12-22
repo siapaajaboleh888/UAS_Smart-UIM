@@ -96,7 +96,6 @@ class CourseDetailData {
               MeetingSubItem(title: 'Zoom Meeting synchronous', icon: Icons.link, isCompleted: false),
               MeetingSubItem(title: 'Pengantar User Interface Design', icon: Icons.description, isCompleted: true),
               MeetingSubItem(title: 'Empat Teori Dasar Antarmuka Pengguna', icon: Icons.article, isCompleted: true),
-              MeetingSubItem(title: 'Empat Teori Dasar Antarmuka Pengguna', icon: Icons.article, isCompleted: true),
               MeetingSubItem(title: 'User Interface Design for Beginner', icon: Icons.play_circle_fill, isCompleted: true),
               MeetingSubItem(title: '10 Prinsip Desain', icon: Icons.lightbulb, isCompleted: true),
               MeetingSubItem(title: 'Best Practice UI Design', icon: Icons.check_circle_outline, isCompleted: true),
