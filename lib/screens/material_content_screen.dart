@@ -509,17 +509,28 @@ class MaterialContentScreen extends StatelessWidget {
   Widget _buildGuidelineItem(String title, String desc) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          const Padding(
+            padding: EdgeInsets.only(top: 6, right: 12),
+            child: _BulletPoint(),
           ),
-          const SizedBox(height: 4),
-          Text(
-            desc,
-            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  desc,
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
+                ),
+              ],
+            ),
           ),
         ],
       ),
