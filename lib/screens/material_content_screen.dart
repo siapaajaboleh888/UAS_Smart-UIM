@@ -256,10 +256,22 @@ class MaterialContentScreen extends StatelessWidget {
         const SizedBox(height: 48),
         const Divider(indent: 32, endIndent: 32, color: Color(0xFFEEEEEE)),
         const SizedBox(height: 32),
+        
+        // User Interface Section
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
+              // Decorative Line
+              Container(
+                width: 50,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 10),
               const Text(
                 'User Interface',
                 style: TextStyle(
@@ -275,6 +287,66 @@ class MaterialContentScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _buildContentText(
                 'UI yang baik adalah UI yang tidak disadari, dan UI yang membuat akan pengguna fokus pada informasi dan data tanpa perlu mengutak-atik mekanisme untuk menampilkan informasi dan melakukan hal tersebut.',
+              ),
+              const SizedBox(height: 24),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Komponen utamanya:',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                      ),
+                      SizedBox(height: 8),
+                      Text('• Input', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
+                      Text('• Output', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 48),
+        
+        // Importance Section
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              // Decorative Line
+              Container(
+                width: 50,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Pentingnya Desain UI yang Baik',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _buildContentText(
+                'Banyak sistem dengan fungsionalitas yang baik tapi tidak efisien, membingungkan, dan tidak berguna karena desain UI yang buruk.',
+              ),
+              const SizedBox(height: 12),
+              _buildContentText(
+                'Antarmuka yang baik merupakan jendela untuk melihat kemampuan dalam serta jembatan bagi kemampuan perangkat lunak.',
+              ),
+              const SizedBox(height: 12),
+              _buildContentText(
+                'Desain yang buruk akan membingungkan, tidak efisien, bahkan menyebabkan frustasi.',
               ),
             ],
           ),
