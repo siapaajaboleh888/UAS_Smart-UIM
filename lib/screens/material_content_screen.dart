@@ -184,6 +184,31 @@ class MaterialContentScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildSectionHeading(String text) {
+    return Column(
+      children: [
+        Container(
+          width: 50,
+          height: 5, // Increased from 3 to 5 for better visibility
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(2.5),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
   Widget _buildIntroContent(UserModel? user) {
     return Column(
       children: [
@@ -262,24 +287,7 @@ class MaterialContentScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              // Decorative Line
-              Container(
-                width: 50,
-                height: 3,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'User Interface',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
+              _buildSectionHeading('User Interface'),
               const SizedBox(height: 24),
               _buildContentText(
                 'Antarmuka User Interface (UI) merupakan bagian dari komputer dan perangkat lunaknya yang dapat dilihat, didengar, disentuh, dan diajak bicara, baik secara langsung maupun dengan proses pemahaman tertentu.',
@@ -318,24 +326,7 @@ class MaterialContentScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              // Decorative Line
-              Container(
-                width: 50,
-                height: 3,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Pentingnya Desain UI yang Baik',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
+              _buildSectionHeading('Pentingnya Desain UI yang Baik'),
               const SizedBox(height: 24),
               _buildContentText(
                 'Banyak sistem dengan fungsionalitas yang baik tapi tidak efisien, membingungkan, dan tidak berguna karena desain UI yang buruk.',
@@ -361,11 +352,8 @@ class MaterialContentScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(
-            child: Text(
-              'UID Guidelines & Principles',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-            ),
+          Center(
+            child: _buildSectionHeading('UID Guidelines & Principles'),
           ),
           const SizedBox(height: 24),
           _buildContentText(
@@ -393,11 +381,8 @@ class MaterialContentScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(
-            child: Text(
-              'User Profile Concept',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-            ),
+          Center(
+            child: _buildSectionHeading('User Profile Concept'),
           ),
           const SizedBox(height: 24),
           _buildContentText(
@@ -424,11 +409,8 @@ class MaterialContentScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(
-            child: Text(
-              'Prinsip Perancangan UI',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-            ),
+          Center(
+            child: _buildSectionHeading('Prinsip Perancangan UI'),
           ),
           const SizedBox(height: 24),
           _buildContentText(
