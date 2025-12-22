@@ -14,12 +14,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  bool _showDashboard = false; // Flag to toggle between Profile and Dashboard on the first tab
+  bool _showDashboard = true; // Flag to toggle between Profile and Dashboard on the first tab
 
   @override
   Widget build(BuildContext context) {
     // Current screen logic for the first tab
-    Widget homeContent = _showDashboard ? const HomeScreen() : const ProfileScreen();
+    Widget homeContent = _showDashboard 
+        ? HomeScreen(onProfileClick: () => setState(() => _showDashboard = false)) 
+        : ProfileScreen(onBack: () => setState(() => _showDashboard = true));
 
     final List<Widget> _screens = [
       homeContent,
@@ -44,8 +46,12 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (index) {
             setState(() {
               if (index == 0) {
-                // If clicking Home tab, always ensure dashboard is shown from now on
-                _showDashboard = true;
+                // If clicking Home tab, show dashboard if it was on profile
+                if (_currentIndex == 0 && !_showDashboard) {
+                  _showDashboard = true;
+                } else if (_currentIndex != 0) {
+                  _showDashboard = true;
+                }
               }
               _currentIndex = index;
             });

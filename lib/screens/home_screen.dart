@@ -12,7 +12,8 @@ import 'courses_screen.dart';
 import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onProfileClick;
+  const HomeScreen({super.key, this.onProfileClick});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -148,10 +149,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
+              if (widget.onProfileClick != null) {
+                widget.onProfileClick!();
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(2),

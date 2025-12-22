@@ -119,11 +119,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
           // Question Navigation (Circles)
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             color: Colors.white,
             child: Wrap(
               spacing: 8,
-              runSpacing: 8,
+              runSpacing: 12,
               alignment: WrapAlignment.center,
               children: List.generate(widget.quiz.questions.length, (index) {
                 bool isCurrent = index == _currentQuestionIndex;
@@ -132,23 +132,31 @@ class _QuizScreenState extends State<QuizScreen> {
                 return GestureDetector(
                   onTap: () => setState(() => _currentQuestionIndex = index),
                   child: Container(
-                    width: 28,
-                    height: 28,
+                    width: 32,
+                    height: 32,
                     decoration: BoxDecoration(
-                      color: isAnswered ? AppColors.primary : Colors.white,
+                      color: (isCurrent || isAnswered) ? AppColors.primary : Colors.white,
                       border: Border.all(
-                        color: isCurrent ? AppColors.primary : Colors.grey.shade400,
-                        width: isCurrent ? 2 : 1,
+                        color: (isCurrent || isAnswered) ? AppColors.primary : Colors.grey.shade300,
+                        width: 1.5,
                       ),
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        if (isCurrent)
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                      ],
                     ),
                     child: Center(
                       child: Text(
                         '${index + 1}',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: isAnswered ? Colors.white : (isCurrent ? AppColors.primary : Colors.grey.shade600),
+                          color: (isCurrent || isAnswered) ? Colors.white : Colors.grey.shade500,
                         ),
                       ),
                     ),

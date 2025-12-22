@@ -28,19 +28,26 @@ class QuizReviewScreen extends StatelessWidget {
           // Result Summary Table
           Container(
             padding: const EdgeInsets.all(20),
-            color: Colors.grey.shade50,
-            child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(1),
-                1: FlexColumnWidth(2),
-              },
-              children: [
-                _buildTableRow('Di Mulai Pada', 'Kamis, 25 Desember 2025, 10:00'),
-                _buildTableRow('Status', 'Selesai'),
-                _buildTableRow('Selesai Pada', 'Kamis, 25 Desember 2025, 10:45'),
-                _buildTableRow('Waktu Penyelesaian', '45 Menit 22 Detik'),
-                _buildTableRow('Nilai', '${score.toStringAsFixed(1)} / 100'),
-              ],
+            color: Colors.white,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade200),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(1.2),
+                  1: FlexColumnWidth(2),
+                },
+                border: TableBorder.symmetric(inside: BorderSide(color: Colors.grey.shade200)),
+                children: [
+                  _buildTableRow('Di Mulai Pada', 'Kamis, 25 Desember 2025, 10:00'),
+                  _buildTableRow('Status', 'Selesai'),
+                  _buildTableRow('Selesai Pada', 'Kamis, 25 Desember 2025, 10:45'),
+                  _buildTableRow('Waktu Penyelesaian', '45 Menit 22 Detik'),
+                  _buildTableRow('Nilai', '${score.toStringAsFixed(1)} / 100'),
+                ],
+              ),
             ),
           ),
           
@@ -62,13 +69,40 @@ class QuizReviewScreen extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Pertanyaan ${index + 1}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: AppColors.textPrimary,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Pertanyaan ${index + 1}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Logic to view specific question if needed, 
+                            // or just a snackbar for demo
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Menampilkan detail soal ${index + 1}')),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(0, 0),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            'Lihat Soal',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -92,7 +126,7 @@ class QuizReviewScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Jawaban Terpilih:',
+                            'Jawaban Tersimpan:',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -107,7 +141,7 @@ class QuizReviewScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12, 
                               fontWeight: FontWeight.w600,
-                              color: isCorrect ? Colors.green.shade700 : Colors.red.shade700,
+                              color: isCorrect ? AppColors.primary : Colors.red.shade700,
                             ),
                           ),
                         ],
