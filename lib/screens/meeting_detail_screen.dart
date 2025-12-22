@@ -5,6 +5,7 @@ import '../models/quiz.dart';
 import 'quiz_info_screen.dart';
 import 'material_content_screen.dart';
 import 'video_material_screen.dart';
+import 'meeting_link_screen.dart';
 
 class MeetingDetailScreen extends StatelessWidget {
   final String courseName;
@@ -344,7 +345,16 @@ class MeetingDetailScreen extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                if (item.title == 'User Interface Design for Beginner') {
+                if (item.icon == Icons.link || item.title.toLowerCase().contains('zoom')) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MeetingLinkScreen(
+                        title: item.title,
+                      ),
+                    ),
+                  );
+                } else if (item.title == 'User Interface Design for Beginner') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
