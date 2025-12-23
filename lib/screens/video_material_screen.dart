@@ -46,7 +46,9 @@ class VideoMaterialScreen extends StatelessWidget {
                 children: [
                   // Full background image with overlay
                   Image.asset(
-                    'assets/images/video_thumb_0.jpg',
+                    title.toLowerCase().contains('mobile') || title.toLowerCase().contains('flutter')
+                        ? 'assets/images/pemrograman_mobile.jpg'
+                        : 'assets/images/video_thumb_0.jpg',
                     width: double.infinity,
                     fit: BoxFit.cover,
                     opacity: const AlwaysStoppedAnimation(0.5),
@@ -72,9 +74,11 @@ class VideoMaterialScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         color: Colors.black87,
-                        child: const Text(
-                          'UI DESIGN',
-                          style: TextStyle(
+                        child: Text(
+                          title.toLowerCase().contains('mobile') || title.toLowerCase().contains('flutter')
+                              ? 'MOBILE DEV'
+                              : 'UI DESIGN',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
@@ -127,33 +131,51 @@ class VideoMaterialScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                _buildVideoListItem(
-                  'UI/UX Design - Apple Style Material',
-                  'assets/images/video_thumb_1.jpg',
-                  '05:24',
-                ),
-                _buildVideoListItem(
-                  'YouTube Interface Guide - Devices',
-                  'assets/images/video_thumb_2.jpg',
-                  '12:45',
-                ),
-                _buildVideoListItem(
-                  'Homepage Design with Reusable Components',
-                  'assets/images/video_thumb_3.jpg',
-                  '08:12',
-                ),
-                _buildVideoListItem(
-                  'YouTube New Look - New UI/UX Analysis',
-                  'assets/images/video_thumb_4.jpg',
-                  '15:30',
-                ),
-                _buildVideoListItem(
-                  '10 Prinsip Desain UI yang Harus Diketahui',
-                  'assets/images/kampus_uim.jpg',
-                  '10:15',
-                ),
-              ],
+              children: title.toLowerCase().contains('mobile') || title.toLowerCase().contains('flutter')
+                ? [
+                    _buildVideoListItem(
+                      'Introduction to Flutter Widgets',
+                      'assets/images/video_thumb_1.jpg',
+                      '10:45',
+                    ),
+                    _buildVideoListItem(
+                      'Dart Programming for Beginners',
+                      'assets/images/video_thumb_2.jpg',
+                      '15:20',
+                    ),
+                    _buildVideoListItem(
+                      'Building Layouts in Flutter',
+                      'assets/images/video_thumb_3.jpg',
+                      '12:10',
+                    ),
+                    _buildVideoListItem(
+                      'State Management Explained',
+                      'assets/images/video_thumb_4.jpg',
+                      '20:30',
+                    ),
+                  ]
+                : [
+                    _buildVideoListItem(
+                      'UI/UX Design - Apple Style Material',
+                      'assets/images/video_thumb_1.jpg',
+                      '05:24',
+                    ),
+                    _buildVideoListItem(
+                      'YouTube Interface Guide - Devices',
+                      'assets/images/video_thumb_2.jpg',
+                      '12:45',
+                    ),
+                    _buildVideoListItem(
+                      'Homepage Design with Reusable Components',
+                      'assets/images/video_thumb_3.jpg',
+                      '08:12',
+                    ),
+                    _buildVideoListItem(
+                      'YouTube New Look - New UI/UX Analysis',
+                      'assets/images/video_thumb_4.jpg',
+                      '15:30',
+                    ),
+                  ],
             ),
           ),
         ],

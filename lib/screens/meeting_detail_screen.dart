@@ -366,7 +366,9 @@ class MeetingDetailScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (item.title == 'User Interface Design for Beginner') {
+                } else if (item.icon == Icons.play_circle_fill || 
+                           item.title.toLowerCase().contains('video') || 
+                           item.title == 'User Interface Design for Beginner') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(

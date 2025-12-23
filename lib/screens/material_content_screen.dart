@@ -186,6 +186,18 @@ class MaterialContentScreen extends StatelessWidget {
                    _buildTestingContent()
                 else if (title.contains('Assessment') || title.contains('Review') || title.contains('Quiz'))
                    _buildAssessmentContent()
+                else if (title.contains('Mobile') || title.contains('Pemrograman Mobile'))
+                  _buildMobileProgrammingContent()
+                else if (title.contains('Flutter') && !title.contains('Layout'))
+                  _buildFlutterBasicsContent()
+                else if (title.contains('Instalasi') || title.contains('Lingkungan Kerja'))
+                  _buildInstalasiContent()
+                else if (title.contains('Stateless') || title.contains('Stateful') || title.contains('State'))
+                  _buildStatefulContent()
+                else if (title.contains('Layout') || title.contains('Widget'))
+                  _buildLayoutingContent()
+                else if (title.contains('Navigation') || title.contains('Routing'))
+                  _buildNavigationContent()
                 else
                   _buildIntroContent(user),
                   
@@ -203,7 +215,7 @@ class MaterialContentScreen extends StatelessWidget {
       children: [
         Container(
           width: 50,
-          height: 5, // Increased from 3 to 5 for better visibility
+          height: 5,
           decoration: BoxDecoration(
             color: AppColors.primary,
             borderRadius: BorderRadius.circular(2.5),
@@ -220,6 +232,221 @@ class MaterialContentScreen extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ],
+    );
+  }
+
+  Widget _buildMobileProgrammingContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Pengantar Pemrograman Mobile'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Pemrograman mobile adalah proses pengembangan aplikasi yang dirancang khusus untuk dijalankan pada perangkat mobile seperti smartphone dan tablet.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Mengapa Belajar Pemrograman Mobile?',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildGuidelineItem('1. Pertumbuhan Pengguna', 'Jumlah pengguna smartphone terus meningkat secara global setiap tahunnya.'),
+          _buildGuidelineItem('2. Aksesibilitas', 'Aplikasi mobile memungkinkan akses informasi kapan saja dan di mana saja.'),
+          _buildGuidelineItem('3. Fitur Perangkat', 'Memanfaatkan fitur unik hardware seperti GPS, Kamera, dan Sensor.'),
+          _buildGuidelineItem('4. Karir & Industri', 'Permintaan pengembang aplikasi mobile sangat tinggi di pasar kerja modern.'),
+          const SizedBox(height: 24),
+          _buildSectionHeading('Platform Mobile'),
+          const SizedBox(height: 16),
+          _buildBulletedText('Native: Pengembangan khusus untuk satu platform (Java/Kotlin untuk Android, Swift untuk iOS).'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Cross-Platform: Satu basis kode untuk banyak platform (Flutter, React Native).'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Hybrid: Aplikasi web yang dibungkus dalam container native.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlutterBasicsContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Dasar-dasar Flutter & Dart'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Flutter adalah UI toolkit dari Google untuk membangun aplikasi yang dikompilasi secara native secara indah untuk mobile, web, dan desktop dari satu basis kode.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Konsep Utama Flutter:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildGuidelineItem('Everything is a Widget', 'Hampir semua elemen di Flutter adalah widget, dari tata letak hingga gaya.'),
+          _buildGuidelineItem('Hot Reload', 'Melihat perubahan kode secara instan tanpa kehilangan state aplikasi.'),
+          _buildGuidelineItem('Declarative UI', 'UI didefinisikan berdasarkan state saat ini, memudahkan manajemen tampilan.'),
+          _buildGuidelineItem('Layered Architecture', 'Memberikan kontrol penuh atas setiap piksel di layar.'),
+          const SizedBox(height: 24),
+          const Text(
+            'Bahasa Pemrograman Dart:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildBulletedText('Optimized for UI: Dart dirancang untuk kebutuhan pengembangan UI yang cepat.'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Productive: Syntax yang familiar bagi pengembang Java/JavaScript.'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Fast on all platforms: Dikompilasi ke machine code ARM & x64.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInstalasiContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Instalasi Lingkungan Kerja'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Langkah-langkah untuk menyiapkan lingkungan pengembangan Flutter di komputer Anda.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Langkah Persiapan:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildGuidelineItem('1. Unduh Flutter SDK', 'Dapatkan versi terbaru dari situs resmi flutter.dev sesuai OS Anda.'),
+          _buildGuidelineItem('2. Update Path Variable', 'Tambahkan direktori bin Flutter ke sistem environment variable.'),
+          _buildGuidelineItem('3. Jalankan Flutter Doctor', 'Perintah untuk mengecek ketergantungan yang belum terpasang.'),
+          _buildGuidelineItem('4. Instal IDE', 'Rekomendasi menggunakan VS Code atau Android Studio dengan plugin Flutter.'),
+          _buildGuidelineItem('5. Siapkan Simulator/Emulator', 'Gunakan Android Emulator atau iOS Simulator untuk testing.'),
+          const SizedBox(height: 24),
+          _buildSectionHeading('Verifikasi Instalasi'),
+          const SizedBox(height: 16),
+          _buildBulletedText('Buka terminal dan ketik "flutter doctor".'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Pastikan tidak ada tanda silang (X) yang kritikal.'),
+          const SizedBox(height: 8),
+          _buildBulletedText('Coba buat proyek baru: "flutter create my_app".'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatefulContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Stateless vs Stateful Widget'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Widget adalah blok pembangun dasar dari setiap aplikasi Flutter. Memahami perbedaan antara Stateless dan Stateful sangat krusial.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Stateless Widget:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildBulletedText('Tidak memiliki internal state (data yang bisa berubah).'),
+          _buildBulletedText('Tampilan hanya bergantung pada informasi konfigurasi yang diberikan saat inisialisasi.'),
+          _buildBulletedText('Contoh: Icon, Text, RaisedButton yang statis.'),
+          const SizedBox(height: 24),
+          const Text(
+            'Stateful Widget:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildBulletedText('Dapat berubah secara dinamis selama masa hidupnya (mutable).'),
+          _buildBulletedText('Memiliki objek State terpisah yang menampung data berubah.'),
+          _buildBulletedText('Contoh: Checkbox, Radio Button, Slider, Form Input.'),
+          const SizedBox(height: 24),
+          _buildGuidelineItem('Kapan menggunakan apa?', 'Gunakan Stateless jika UI tidak berubah berdasarkan interaksi pengguna atau data eksternal. Gunakan Stateful jika UI perlu diperbarui saat data berubah.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLayoutingContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Layouting & Basic Widgets'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Layouting di Flutter dilakukan dengan menyusun widget di dalam widget lainnya. Flutter menggunakan model box layout.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Widget Tata Letak Utama:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildGuidelineItem('Container', 'Widget paling serbaguna untuk dekorasi (warna, border, shadow) dan padding/margin.'),
+          _buildGuidelineItem('Row & Column', 'Menyusun widget secara horizontal (Row) atau vertikal (Column).'),
+          _buildGuidelineItem('Stack', 'Menumpuk widget satu di atas yang lain (seperti lapisan di Photoshop).'),
+          _buildGuidelineItem('ListView', 'Menampilkan daftar item secara linier yang dapat digulir.'),
+          const SizedBox(height: 24),
+          _buildSectionHeading('MainAxisAlignment & CrossAxisAlignment'),
+          const SizedBox(height: 16),
+          _buildBulletedText('MainAxis: Sumbu utama (Horizontal untuk Row, Vertikal untuk Column).'),
+          _buildBulletedText('CrossAxis: Sumbu tegak lurus terhadap sumbu utama.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _buildSectionHeading('Navigation & Routing'),
+          ),
+          const SizedBox(height: 24),
+          _buildContentText(
+            'Sistem navigasi Flutter memungkinkan Anda berpindah antar layar (routes) dengan lancar.',
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Konsep Navigator:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+          ),
+          const SizedBox(height: 16),
+          _buildGuidelineItem('Navigator.push()', 'Menambahkan rute baru ke dalam tumpukan (stack) navigasi.'),
+          _buildGuidelineItem('Navigator.pop()', 'Menghapus rute saat ini dari tumpukan untuk kembali ke layar sebelumnya.'),
+          _buildGuidelineItem('Named Routes', 'Mendaftarkan route dengan string (ID) untuk kemudahan manajemen aplikasi besar.'),
+          _buildGuidelineItem('Passing Data', 'Mengirim parameter ke layar tujuan melalui constructor atau Arguments.'),
+          const SizedBox(height: 24),
+          _buildSectionHeading('MaterialPageRoute'),
+          const SizedBox(height: 16),
+          _buildBulletedText('Menangani transisi antar layar spesifik platform (Slide up di iOS, Fade in di Android).'),
+        ],
+      ),
     );
   }
 
