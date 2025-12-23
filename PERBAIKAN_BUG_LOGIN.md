@@ -4,7 +4,7 @@
 
 ### Gejala:
 1. **Gambar 1**: Database menampilkan user "BUDI SANTOSO" yang baru didaftarkan
-2. **Gambar 2**: Registrasi berhasil untuk "BUDI SANTOSO" (NIM: 2024455566677)
+2. **Gambar 2**: Registrasi berhasil untuk "BUDI SANTOSO" (NIM: 2025455566677)
 3. **Gambar 3-4**: Setelah login, sistem menampilkan data "MOH. SYAIFUL ANAM" (NIM: 202202010078) - **DATA SALAH!**
 
 ### Root Cause:
@@ -102,12 +102,12 @@ Future<void> _initializeDefaultUsers() async {
 ```
 1. Klik "Daftar Akun Baru"
 2. Isi dengan data BENAR:
-   - NIM: 2024455566677
+   - NIM: 2025455566677
    - Nama: BUDI SANTOSO
    - Email: budisantoso@student.uim.ac.id
    - Phone: 081234567890
    - Prodi: Sistem Informasi
-   - Angkatan: 2024
+   - Angkatan: 2025
    - Password: test123
    - Confirm Password: test123
 3. ✅ Centang "Setuju dengan Syarat dan Ketentuan"
@@ -120,7 +120,7 @@ Future<void> _initializeDefaultUsers() async {
 8. Klik "Login"
 9. ✅ Harus berhasil login dan menampilkan:
    - Nama: BUDI SANTOSO  ← **BUKAN "MOH. SYAIFUL ANAM"!**
-   - NIM: 2024455566677
+   - NIM: 2025455566677
    - Prodi: Sistem Informasi
 ```
 

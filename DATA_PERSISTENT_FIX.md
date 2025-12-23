@@ -33,10 +33,10 @@ dependencies:
 2. Klik **"Daftar Akun Baru"**
 3. Isi form dengan data BERBEDA:
    ```
-   NIM: 2024111222333
+   NIM: 2025111222333
    Nama: ANDI PRATAMA
    Prodi: Sistem Informasi
-   Angkatan: 2024
+   Angkatan: 2025
    Email: andipratama@student.uim.ac.id
    Phone: 081234567890
    Password: test123
@@ -60,7 +60,7 @@ dependencies:
    - Initials: "AP" (bukan "MS")
    - Nama: "ANDI PRATAMA" (bukan "MOH. SYAIFUL ANAM")
    - Email: "andipratama@student.uim.ac.id"
-   - NIM: "2024111222333"
+   - NIM: "2025111222333"
    - Prodi: "Sistem Informasi"
 
 ---

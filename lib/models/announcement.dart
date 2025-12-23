@@ -32,24 +32,24 @@ class Announcement {
     return [
       Announcement(
         id: '1',
-        title: 'Pengumuman UAS Semester Genap 2024/2025',
+        title: 'Pengumuman UAS Semester Ganjil 2025/2026',
         content: 'Diinformasikan kepada seluruh mahasiswa, UAS akan dilaksanakan secara hybrid (online & offline) mulai tanggal 20 Desember 2025...',
         author: 'Admin IT Smart UIM',
-        date: DateTime(2024, 12, 10, 10, 45),
+        date: DateTime(2025, 12, 10, 10, 45),
       ),
       Announcement(
         id: '2',
         title: 'Maintenance Sistem Smart UIM',
         content: 'Sistem akan dilakukan maintenance pada hari Minggu, 15 Desember 2025 pukul 00.00 - 06.00 WIB untuk meningkatkan performa sistem.',
         author: 'Admin IT Smart UIM',
-        date: DateTime(2024, 12, 8, 14, 30),
+        date: DateTime(2025, 12, 8, 14, 30),
       ),
       Announcement(
         id: '3',
         title: 'Pengumpulan Tugas Akhir Semester',
         content: 'Batas akhir pengumpulan tugas akhir semester adalah tanggal 18 Desember 2025 pukul 23:59 WIB. Harap kumpulkan tepat waktu.',
         author: 'Admin IT Smart UIM',
-        date: DateTime(2024, 12, 5, 9, 15),
+        date: DateTime(2025, 12, 5, 9, 15),
       ),
     ];
   }

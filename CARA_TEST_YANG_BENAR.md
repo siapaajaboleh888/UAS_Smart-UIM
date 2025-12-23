@@ -35,10 +35,10 @@ location.reload();
 ### 1.2 Isi Form Registrasi dengan Data BENAR:
 
 ```
-NIM:              2024455566677
+NIM:              2025455566677
 Nama Lengkap:     BUDI SANTOSO
 Program Studi:    Sistem Informasi
-Angkatan:         2024
+Angkatan:         2025
 Email:            budisantoso@student.uim.ac.id
 Nomor Telepon:    081234567890
 Password:         test123
@@ -53,7 +53,7 @@ Konfirmasi Password: test123
 Harus muncul dialog **"Registrasi Berhasil!"** dengan detail:
 ```
 Detail Akun:
-- NIM: 2024455566677
+- NIM: 2025455566677
 - Nama: BUDI SANTOSO
 - Email: budisantoso@student.uim.ac.id
 - Prodi: Sistem Informasi
@@ -87,11 +87,11 @@ Harus ada log:
 🔄 Reloading user data...
 ✅ Loaded 2 registered users  // atau 1 jika hanya ada 1 user
    - MOH. SYAIFUL ANAM (2022020100078)
-   - BUDI SANTOSO (2024455566677)
+   - BUDI SANTOSO (2025455566677)
 ✅ Loaded current user: BUDI SANTOSO
 🔍 Looking for user with: budisantoso@student.uim.ac.id
 📊 Total registered users: 2
-✅ Found matching user: BUDI SANTOSO (2024455566677)
+✅ Found matching user: BUDI SANTOSO (2025455566677)
 ✅ Login successful: BUDI SANTOSO
 ```
 
@@ -120,13 +120,13 @@ Informasi User
    budisantoso@student.uim.ac.id
 
 🆔 NIM
-   2024455566677
+   2025455566677
 
 📚 Program Studi
    Sistem Informasi
 
 📅 Angkatan
-   2024
+   2025
 
 📱 Nomor Telepon
    081234567890
@@ -212,10 +212,10 @@ Isi checklist ini setelah selesai testing:
 - [ ] Halaman Home menampilkan nama **BUDI SANTOSO** (BUKAN "MOH. SYAIFUL ANAM")
 - [ ] Halaman Profile menampilkan:
   - [ ] Nama: BUDI SANTOSO
-  - [ ] NIM: 2024455566677
+  - [ ] NIM: 2025455566677
   - [ ] Email: budisantoso@student.uim.ac.id
   - [ ] Prodi: Sistem Informasi
-  - [ ] Angkatan: 2024
+  - [ ] Angkatan: 2025
   - [ ] Phone: 081234567890
 
 ### Login Gagal:

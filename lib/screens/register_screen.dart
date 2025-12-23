@@ -280,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                         decoration: InputDecoration(
                           labelText: 'NIM',
-                          hintText: 'Contoh: 2022020100078',
+                          hintText: 'Contoh: 2025020100078',
                           prefixIcon: Icon(Icons.badge_outlined, color: AppColors.primary),
                         ),
                         validator: (value) {

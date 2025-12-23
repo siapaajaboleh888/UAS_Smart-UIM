@@ -19,10 +19,10 @@
 1. Klik **"Daftar Akun Baru"**
 2. Isi form dengan data ini:
    ```
-   NIM: 2024777888999
+   NIM: 2025777888999
    Nama: ANDI WIJAYA
    Prodi: Sistem Informasi
-   Angkatan: 2024
+   Angkatan: 2025
    Email: andiwijaya@student.uim.ac.id
    Phone: 081234567890
    Password: test123
@@ -51,7 +51,7 @@ Buka DevTools Console dan cari log seperti ini:
 ```
 🔄 Reloading user data...
 ✅ Loaded 1 registered users
-   - ANDI WIJAYA (2024777888999)
+   - ANDI WIJAYA (2025777888999)
 🔍 Looking for user with: andiwijaya@student.uim.ac.id
 📊 Total registered users: 1
 ✅ Found matching user: ANDI WIJAYA
@@ -73,7 +73,7 @@ Buka DevTools Console dan cari log seperti ini:
    - Avatar initials: **"AW"**
    - Nama: **"ANDI WIJAYA"**
    - Email: "andiwijaya@student.uim.ac.id"
-   - NIM: "2024777888999"
+   - NIM: "2025777888999"
    - Prodi: "Sistem Informasi"
 
 ---
@@ -120,7 +120,7 @@ Buka DevTools Console dan cari log seperti ini:
 | **Avatar** | "AW" | "MS" |
 | **Profile - Nama** | "ANDI WIJAYA" | "MOH. SYAIFUL ANAM" |
 | **Profile - Email** | "andiwijaya@student.uim.ac.id" | "syaifulanam@uim.ac.id" |
-| **Profile - NIM** | "2024777888999" | "2022020100078" |
+| **Profile - NIM** | "2025777888999" | "2022020100078" |
 
 ---
 

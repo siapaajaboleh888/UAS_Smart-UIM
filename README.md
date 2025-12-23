@@ -309,7 +309,7 @@ flutter build apk --release
 
 **Mata Kuliah**: Pemrograman Mobile  
 **Dosen**: Rofi Uddin, S.Kom., M.Kom  
-**Semester**: Genap 2024/2025  
+**Semester**: Ganjil 2025/2026  
 **Deadline**: 31 Desember 2025, 23:59 WIB  
 
 ---
