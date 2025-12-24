@@ -77,10 +77,10 @@ class AnnouncementDetailScreen extends StatelessWidget {
               const SizedBox(height: 40),
 
               // Title Section
-              const Center(
+              Center(
                 child: Text(
-                  'Maintenance LMS',
-                  style: TextStyle(
+                  notification.title.toUpperCase().contains('MAINTENANCE') ? 'Maintenance LMS' : 'Pengumuman',
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primary,
@@ -102,17 +102,26 @@ class AnnouncementDetailScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildParagraph(
-                              'Diinformasikan kepada seluruh pengguna LMS, kami dari tim Smart UIM akan melakukan maintenance untuk meningkatkan layanan server dalam menghadapi ujian akhir semester (UAS).',
+                            Text(
+                              notification.title,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             _buildParagraph(
-                              'Dengan adanya kegiatan maintenance tersebut maka situs LMS (smart-uim.ac.id) tidak dapat diakses mulai pukul 00.00 s/d 06.00 WIB.',
+                              notification.message.isNotEmpty 
+                                  ? notification.message 
+                                  : 'Tidak ada detail pesan untuk pengumuman ini.',
                             ),
-                            const SizedBox(height: 16),
-                            _buildParagraph(
-                              'Demikian informasi ini kami sampaikan, mohon maaf atas ketidaknyamanannya.',
-                            ),
+                            if (notification.title.contains('Maintenance')) ...[
+                              const SizedBox(height: 16),
+                              _buildParagraph(
+                                'Dengan adanya kegiatan maintenance tersebut maka situs LMS (smart-uim.ac.id) tidak dapat diakses untuk sementara waktu.',
+                              ),
+                            ],
                             const SizedBox(height: 32),
                             const Text(
                               'Hormat Kami,\nAdmin Smart UIM',

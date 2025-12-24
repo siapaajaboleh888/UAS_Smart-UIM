@@ -3,6 +3,8 @@ import '../constants/app_colors.dart';
 import '../models/notification_item.dart';
 import 'announcement_detail_screen.dart';
 
+import 'assignment_detail_screen.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -264,6 +266,31 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AnnouncementDetailScreen(notification: notification),
+                  ),
+                );
+              } else if (notification.type == 'assignment') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AssignmentDetailScreen(
+                      title: notification.title,
+                      deadline: 'Jumat, 25 Februari 2025, 23:59 WIB',
+                      description: 'Silakan cek detail instruksi tugas pada halaman pengumuman mata kuliah.',
+                    ),
+                  ),
+                );
+              } else if (notification.type == 'system') {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(notification.title),
+                    content: Text(notification.message),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('TUTUP'),
+                      ),
+                    ],
                   ),
                 );
               } else {

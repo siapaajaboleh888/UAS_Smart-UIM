@@ -63,8 +63,8 @@ class NotificationItem {
       ),
       NotificationItem(
         id: '4',
-        title: 'PENGUMUMAN: Maintenance LMS',
-        message: 'Situs LMS tidak dapat diakses mulai pukul 00.00 s/d 06.00 WIB dikarenakan pemeliharaan sistem rutin.',
+        title: 'WORKSHOP: Hybrid Mobile App with Flutter',
+        message: 'Jangan lewatkan workshop intensif membangun aplikasi mobile hybrid menggunakan Flutter pada akhir pekan ini. Daftar segera!',
         type: 'announcement',
         timestamp: now.subtract(const Duration(days: 2)),
         isRead: true,
