@@ -48,14 +48,16 @@ class AssignmentDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   _buildInstructionItem('1. Buatlah desain tampilan (antarmuka) pada aplikasi mobile game FPS (First Person Shooter) yang akan menjadi tugas pada mata kuliah Pemrograman Aplikasi Permainan.'),
-                   _buildInstructionItem('2. Desain yang dibuat harus melingkupi seluruh tampilan pada aplikasi game, dari pertama kali aplikasi dibuka sampai tutup kembali, serta desain untuk tampilan-tampilan fungsi yang mendukung permainan seperti pop up, alert, chat dan lain-lain.'),
-                   _buildInstructionItem('3. Desain bisa dibuat menggunakan aplikasi khusus desain atau secara manual dengan tetap menjunjung kerapihan dan kejelasan setiap elemen dalam desain.'),
-                   _buildInstructionItem('4. Berikan identitas aplikasi game yang dibuat, seperti Nama Game, Genre, dan Platform. Serta berikan penjelasan pada setiap elemen pada desain, seperti gambar, teks, tombol, icon, dan lain-lain.'),
-                   _buildInstructionItem('5. File dikumpulkan dalam format PDF dengan size maksimal 5MB.'),
-                   _buildInstructionItem('6. Tugas dikumpulkan paling lambat hari Jum\'at, 21 Februari 2025 jam 23:59 WIB (akan tertutup otomatis) dan akan dipresentasikan pada pertemuan selanjutnya via Zoom Meeting.'),
-                ],
+                children: description.isNotEmpty
+                    ? description.split('\n').map((line) => _buildInstructionItem(line)).toList()
+                    : [
+                        _buildInstructionItem('1. Buatlah desain tampilan (antarmuka) pada aplikasi mobile game FPS (First Person Shooter) yang akan menjadi tugas pada mata kuliah Pemrograman Aplikasi Permainan.'),
+                        _buildInstructionItem('2. Desain yang dibuat harus melingkupi seluruh tampilan pada aplikasi game, dari pertama kali aplikasi dibuka sampai tutup kembali, serta desain untuk tampilan-tampilan fungsi yang mendukung permainan seperti pop up, alert, chat dan lain-lain.'),
+                        _buildInstructionItem('3. Desain bisa dibuat menggunakan aplikasi khusus desain atau secara manual dengan tetap menjunjung kerapihan dan kejelasan setiap elemen dalam desain.'),
+                        _buildInstructionItem('4. Berikan identitas aplikasi game yang dibuat, seperti Nama Game, Genre, dan Platform. Serta berikan penjelasan pada setiap elemen pada desain, seperti gambar, teks, tombol, icon, dan lain-lain.'),
+                        _buildInstructionItem('5. File dikumpulkan dalam format PDF dengan size maksimal 5MB.'),
+                        _buildInstructionItem('6. Tugas dikumpulkan paling lambat hari Jum\'at, 21 Februari 2025 jam 23:59 WIB (akan tertutup otomatis) dan akan dipresentasikan pada pertemuan selanjutnya via Zoom Meeting.'),
+                      ],
               ),
             ),
 
@@ -151,38 +153,46 @@ class AssignmentDetailScreen extends StatelessWidget {
           bottom: BorderSide(color: Colors.grey.shade100),
         ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.grey.shade600,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                if (isFile) const Icon(Icons.picture_as_pdf, size: 16, color: Colors.grey),
-                if (isFile) const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: isFile ? AppColors.primary : Colors.grey.shade800,
-                      fontWeight: isFile ? FontWeight.bold : FontWeight.normal,
-                    ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isFile ? () {
+            // Simulated file view
+          } : null,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade600,
                   ),
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    if (isFile) const Icon(Icons.picture_as_pdf, size: 16, color: Colors.grey),
+                    if (isFile) const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isFile ? AppColors.primary : Colors.grey.shade800,
+                          fontWeight: isFile ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -197,8 +207,40 @@ class AssignmentDetailScreen extends StatelessWidget {
   }
 }
 
-class UploadAssignmentScreen extends StatelessWidget {
+class UploadAssignmentScreen extends StatefulWidget {
   const UploadAssignmentScreen({super.key});
+
+  @override
+  State<UploadAssignmentScreen> createState() => _UploadAssignmentScreenState();
+}
+
+class _UploadAssignmentScreenState extends State<UploadAssignmentScreen> {
+  String? _selectedFileName;
+
+  void _pickFile() {
+    setState(() {
+      _selectedFileName = 'Tugas_01_Anam.pdf';
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('File berhasil dipilih: Tugas_01_Anam.pdf'), duration: Duration(seconds: 2)),
+    );
+  }
+
+  void _saveFile() {
+    if (_selectedFileName == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pilih file terlebih dahulu sebelum menyimpan!'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Tugas berhasil disimpan!'), backgroundColor: AppColors.success),
+    );
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) Navigator.pop(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -234,23 +276,38 @@ class UploadAssignmentScreen extends StatelessWidget {
             const SizedBox(height: 20),
             
             // Upload Dropzone
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload_outlined, size: 80, color: AppColors.primary.withOpacity(0.7)),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Pilih yang mau di upload buat kursor di sini',
-                    style: TextStyle(fontSize: 11, color: Colors.grey),
+            GestureDetector(
+              onTap: _pickFile,
+              child: Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: _selectedFileName != null ? AppColors.primary.withOpacity(0.05) : Colors.transparent,
+                  border: Border.all(
+                    color: _selectedFileName != null ? AppColors.primary : Colors.grey.shade300, 
+                    style: BorderStyle.solid
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      _selectedFileName != null ? Icons.file_present : Icons.cloud_upload_outlined, 
+                      size: 80, 
+                      color: AppColors.primary.withOpacity(0.7)
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      _selectedFileName ?? 'Pilih yang mau di upload buat kursor di sini',
+                      style: TextStyle(
+                        fontSize: 11, 
+                        color: _selectedFileName != null ? AppColors.primary : Colors.grey,
+                        fontWeight: _selectedFileName != null ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             
@@ -260,7 +317,7 @@ class UploadAssignmentScreen extends StatelessWidget {
             SizedBox(
               width: 120,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _pickFile,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey.shade100,
                   foregroundColor: Colors.grey.shade700,
@@ -274,10 +331,10 @@ class UploadAssignmentScreen extends StatelessWidget {
             SizedBox(
               width: 120,
               child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: _saveFile,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade100,
-                  foregroundColor: Colors.grey.shade700,
+                  backgroundColor: _selectedFileName != null ? AppColors.primary : Colors.grey.shade100,
+                  foregroundColor: _selectedFileName != null ? Colors.white : Colors.grey.shade700,
                   elevation: 0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
